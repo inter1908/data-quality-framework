@@ -1,0 +1,11 @@
+Indice,NomeAttributo,start,length,TipoDato,ValoriAmmessi,Minimo,Massimo,Lunghezza,Obbligatorio,Formato,FunzioneCustom,Regex,CaseSensitive,CodiceErrore,CodiceErroreObbligatorio,CodiceErroreTipo,CodiceErroreFormato,CodiceErroreRegex,CodiceErroreDominio,CodiceErroreRange,CodiceErroreLunghezza,CodiceErroreCustom,Note
+0,NumeroTest,,,int,,,,,true,,,,false,E00001,E00101,E00102,,,,,,Numero progressivo test
+1,Nome,,,stringa,,,,,true,2-20,,,,E00002,E00201,,,,,,E00207,,Nome dipendente
+2,Cognome,,,stringa,,,,,true,2-20,,,,E00003,E00301,,,,,,E00307,,Cognome dipendente
+3,CodiceDipendente,,,stringa,,,,=8,true,,,^DIP[0-9]{5}$,,E00004,E00401,,,E00404,,,E00407,,Codice dipendente DIPnnnnn
+4,Email,,,stringa,,,,,true,,is_email_valid,,,E00005,E00501,,,,,,,E00508,Email formato RFC5322
+5,DataNascita,,,date,,,,,true,%d/%m/%Y,is_data_valid,,,E00006,E00601,,E00603,,,,,E00608,Data nascita formato gg/mm/aaaa
+6,Stipendio,,,float,,1500.00,150000.00,,true,,,,,E00007,E00701,E00702,,,,E00706,,,Stipendio mensile 1500-150000
+7,Reparto,,,stringa,IT|HR|Sales|Finance|Operations,,,,true,,,,,E00008,E00801,,,,E00805,,,Reparto aziendale
+8,CAP,,,stringa,,,,=5,true,,,^[0-9]{5}$,,E00009,E00901,,,E00904,,,E00907,,CAP italiano 5 cifre
+9,Attivo,,,stringa,SI|NO,,,,true,,,,false,E00010,E01001,,,,E01005,,,Stato attivo SI o NO

@@ -1,0 +1,25 @@
+# Ignore log files
+log/
+*.log
+
+# Ignore IDE
+.vscode/
+.idea/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore temporary demo data
+demo/*/input/skipped/
+demo/*/output/success/*
+demo/*/output/error/*
+demo/*/output/report/*
+demo/*/output/statistics/*
+
+# Keep structure folders with README
+!demo/*/input/skipped/.gitkeep
+!demo/*/output/success/.gitkeep
+!demo/*/output/error/.gitkeep
+!demo/*/output/report/.gitkeep
+!demo/*/output/statistics/.gitkeep
