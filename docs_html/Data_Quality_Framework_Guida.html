@@ -1,0 +1,2852 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Quality Framework - Guida Completa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #24292e;
+            background-color: #ffffff;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Navigation */
+        #sidebar {
+            width: 340px;
+            background-color: #f6f8fa;
+            border-right: 1px solid #e1e4e8;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            left: 0;
+            top: 0;
+        }
+        #sidebar h3 {
+            color: #0366d6;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0366d6;
+        }
+        #sidebar ul {
+            list-style: none;
+            line-height: 1.2;
+        }
+        #sidebar ul li {
+            margin-bottom: 2px;
+        }
+        #sidebar ul ul {
+            margin-left: 15px;
+            margin-top: 2px;
+        }
+        #sidebar ul ul li {
+            margin-bottom: 2px;
+        }
+        #sidebar a {
+            color: #586069;
+            text-decoration: none;
+            display: block;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            line-height: 1.2;
+        }
+        #sidebar a:hover {
+            background-color: #e1e4e8;
+            color: #0366d6;
+        }
+        #sidebar a.active {
+            background-color: #0366d6;
+            color: white;
+            font-weight: 600;
+        }
+        #sidebar ul ul a {
+            font-size: 0.85em;
+            padding: 1px 10px;
+        }
+        
+        /* Main Content */
+        #main-content {
+            margin-left: 340px;
+            padding: 40px 60px;
+            max-width: 1200px;
+            flex: 1;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            line-height: 1.25;
+            scroll-margin-top: 20px;
+        }
+        h1 { 
+            font-size: 2.5em; 
+            border-bottom: 2px solid #eaecef; 
+            padding-bottom: 0.3em;
+            color: #0366d6;
+            margin-top: 0;
+        }
+        h2 { 
+            font-size: 1.8em; 
+            border-bottom: 1px solid #eaecef; 
+            padding-bottom: 0.3em;
+            color: #0366d6;
+            margin-top: 40px;
+        }
+        h3 { 
+            font-size: 1.4em; 
+            color: #2c3e50;
+            margin-top: 30px;
+        }
+        h4 { 
+            font-size: 1.15em; 
+            color: #34495e;
+            margin-top: 20px;
+        }
+        h5 { 
+            font-size: 1.05em; 
+            color: #495057;
+            margin-top: 16px;
+        }
+        h6 { 
+            font-size: 1em; 
+            color: #6c757d;
+            margin-top: 16px;
+        }
+        code {
+            background-color: rgba(27,31,35,0.05);
+            border-radius: 3px;
+            padding: 0.2em 0.4em;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #f6f8fa;
+            border-radius: 6px;
+            padding: 16px;
+            overflow: auto;
+            border: 1px solid #e1e4e8;
+            line-height: 1.45;
+            margin: 16px 0;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 16px 0;
+        }
+        table th, table td {
+            border: 1px solid #dfe2e5;
+            padding: 8px 13px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f6f8fa;
+            font-weight: 600;
+        }
+        .mermaid {
+            text-align: center;
+            margin: 30px 0;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e1e4e8;
+        }
+        blockquote {
+            border-left: 4px solid #dfe2e5;
+            padding: 0 15px;
+            color: #6a737d;
+            margin: 15px 0;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        ul li, ol li {
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+        ul ul, ol ol, ul ol, ol ul {
+            margin: 6px 0;
+            padding-left: 25px;
+        }
+        ul ul li, ol ol li {
+            margin: 3px 0;
+            line-height: 1.4;
+        }
+        /* Riduzione interlinea per sezione Indice */
+        #indice + ul li,
+        #indice + ul ul li {
+            margin: 1px 0;
+            line-height: 1.2;
+        }
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #eaecef;
+            margin: 40px 0;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: #6a737d;
+            font-size: 0.9em;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #eaecef;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            #sidebar {
+                display: none;
+            }
+            #main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+        
+        /* Scroll smooth */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Mermaid - rimuovi background dai label delle frecce */
+        .edgeLabel {
+            background-color: transparent !important;
+        }
+        .edgeLabel rect {
+            fill: transparent !important;
+            stroke: none !important;
+        }
+        .edgeLabel span {
+            background-color: transparent !important;
+            padding: 2px 6px !important;
+            border-radius: 3px !important;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        
+        // Highlight active section on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('h1, h2, h3');
+            const navLinks = document.querySelectorAll('#sidebar a');
+            
+            function updateActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const scrollPos = window.pageYOffset + 100;
+                    if (scrollPos >= sectionTop) {
+                        current = section.id;
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', updateActiveLink);
+            updateActiveLink();
+        });
+    </script>
+</head>
+<body>
+    <nav id="sidebar">
+        <h3>📚 Indice</h3>
+        <ul>
+            <li><a href="#introduzione">🏠 Introduzione</a></li>
+            <li><a href="#1-introduzione-e-panoramica">📊 1. Introduzione e Panoramica</a>
+                <ul>
+                    <li><a href="#11-architettura-ad-alto-livello">1.1 Architettura</a></li>
+                    <li><a href="#12-dettaglio-funzionamento">1.2 Dettaglio funzionamento</a></li>
+                    <li><a href="#13-pattern-matching-e-selezione-file">1.3 Pattern Matching</a></li>
+                    <li><a href="#14-invocazione-ed-esecuzione">1.4 Invocazione</a>
+                        <ul>
+                            <li><a href="#141-sintassi-comando">1.4.1 Sintassi</a></li>
+                            <li><a href="#142-gestione-errori-invocazione">1.4.2 Gestione Errori</a></li>
+                            <li><a href="#143-risoluzione-configurazione-flusso">1.4.3 Risoluzione Config</a></li>
+                            <li><a href="#144-flusso-completo-di-avvio">1.4.4 Flusso Avvio</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#2-configurazione-data-quality-framework">🗂️ 2. Configurazione</a>
+                <ul>
+                    <li><a href="#21-file-di-configurazione-sistema-e-flusso">2.1 File Config Sistema/Flusso</a>
+                        <ul>
+                            <li><a href="#211-gerarchia-e-risoluzione-parametri">2.1.1 Gerarchia Parametri</a></li>
+                            <li><a href="#212-parametri-di-configurazione">2.1.2 Parametri</a></li>
+                            <li><a href="#213-mapping-flussi-nel-file-di-sistema">2.1.3 Mapping Flussi</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#22-file-di-tracciato-csv">2.2 File di Tracciato</a>
+                        <ul>
+                            <li><a href="#221-struttura-file-tracciato">2.2.1 Struttura</a></li>
+                            <li><a href="#222-tipi-di-controllo-e-combinazioni">2.2.2 Tipi Controllo</a></li>
+                            <li><a href="#223-esempio-annotato">2.2.3 Esempio Annotato</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#23-workflow-configurazione-end-to-end">2.3 Workflow Config</a>
+                        <ul>
+                            <li><a href="#231-checklist-configurazione-nuovo-flusso">2.3.1 Checklist</a></li>
+                            <li><a href="#232-diagramma-relazionale-configurazione">2.3.2 Diagramma</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#3-flussi-di-output">📤 3. Flussi di Output</a>
+                <ul>
+                    <li><a href="#31-file-di-scarto-ko">🚫 3.1 File di Scarto</a>
+                        <ul>
+                            <li><a href="#311-struttura-del-file-di-scarto">3.1.1 Struttura</a></li>
+                            <li><a href="#312-esempio-file-csv">3.1.2 Esempio CSV</a></li>
+                            <li><a href="#313-esempio-file-fixed-fixed-width">3.1.3 Esempio FIXED</a></li>
+                            <li><a href="#314-utilizzo-operativo">3.1.4 Utilizzo</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#32-anagrafica-codici-errore-codici">📋 3.2 Codici Errore</a>
+                        <ul>
+                            <li><a href="#321-struttura-del-file">3.2.1 Struttura</a></li>
+                            <li><a href="#322-utilizzo-operativo">3.2.2 Utilizzo</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#33-report-statistiche-stats">📊 3.3 Statistiche</a>
+                        <ul>
+                            <li><a href="#331-struttura-del-report">3.3.1 Struttura</a></li>
+                            <li><a href="#332-esempio-report-reale">3.3.2 Esempio</a></li>
+                            <li><a href="#333-utilizzo-operativo">3.3.3 Utilizzo</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#34-file-di-log">📝 3.4 File di Log</a>
+                        <ul>
+                            <li><a href="#341-struttura-del-log">3.4.1 Struttura</a></li>
+                            <li><a href="#342-contenuto-del-log">3.4.2 Contenuto</a></li>
+                            <li><a href="#343-livelli-di-logging">3.4.3 Livelli</a></li>
+                            <li><a href="#344-esempio-log-completo-estratto-reale">3.4.4 Esempio</a></li>
+                            <li><a href="#345-utilizzo-operativo">3.4.5 Utilizzo</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    
+    <main id="main-content">
+<h1 id="data-quality-framework-guida"><strong><em>Data Quality Framework</em></strong> - Guida</h1>
+<h2 id="indice">📑 Indice</h2>
+<h3 id="0-installazione-e-deployment">📦 <a href="#0-installazione-e-deployment">0. Installazione e Deployment</a></h3>
+<ul>
+<li><a href="#01-requisiti-di-sistema">0.1 Requisiti di Sistema</a></li>
+<li><a href="#02-package-di-distribuzione">0.2 Package di Distribuzione</a></li>
+<li><a href="#03-struttura-directory-del-binario">0.3 Struttura Directory del Binario</a></li>
+<li><a href="#04-procedura-di-installazione">0.4 Procedura di Installazione</a><ul>
+<li><a href="#041-installazione-su-windows">0.4.1 Installazione su Windows</a></li>
+<li><a href="#042-installazione-su-linux">0.4.2 Installazione su Linux</a></li>
+</ul>
+</li>
+<li><a href="#05-verifica-installazione">0.5 Verifica Installazione</a></li>
+<li><a href="#06-troubleshooting-deployment">0.6 Troubleshooting Deployment</a></li>
+</ul>
+<h3 id="1-introduzione-e-panoramica">📖 <a href="#1-introduzione-e-panoramica">1. Introduzione e Panoramica</a></h3>
+<ul>
+<li><a href="#11-architettura-ad-alto-livello">1.1 Architettura ad alto livello</a></li>
+<li><a href="#12-dettaglio-funzionamento">1.2 Dettaglio funzionamento</a></li>
+<li><a href="#13-pattern-matching-e-selezione-file">1.3 Pattern matching e selezione file</a></li>
+<li><a href="#14-invocazione-ed-esecuzione">1.4 Invocazione ed Esecuzione</a><ul>
+<li><a href="#141-sintassi-comando">1.4.1 Sintassi Comando</a></li>
+<li><a href="#142-gestione-errori-invocazione">1.4.2 Gestione Errori Invocazione</a></li>
+<li><a href="#143-risoluzione-configurazione-flusso">1.4.3 Risoluzione Configurazione Flusso</a></li>
+<li><a href="#144-flusso-completo-di-avvio">1.4.4 Flusso Completo di Avvio</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="2-configurazione-data-quality-framework">🗂️ <a href="#2-configurazione-data-quality-framework">2. Configurazione <strong><em>Data Quality Framework</em></strong></a></h3>
+<ul>
+<li><a href="#21-file-di-configurazione-sistema-e-flusso">2.1 File di Configurazione Sistema e Flusso</a><ul>
+<li><a href="#211-gerarchia-e-risoluzione-parametri">2.1.1 Gerarchia e Risoluzione Parametri</a></li>
+<li><a href="#212-parametri-di-configurazione">2.1.2 Parametri di Configurazione</a></li>
+<li><a href="#213-mapping-flussi-nel-file-di-sistema">2.1.3 Mapping Flussi nel File di Sistema</a></li>
+</ul>
+</li>
+<li><a href="#22-file-di-tracciato-csv">2.2 File di Tracciato (.csv)</a><ul>
+<li><a href="#221-struttura-file-tracciato">2.2.1 Struttura File Tracciato</a></li>
+<li><a href="#222-tipi-di-controllo-e-combinazioni">2.2.2 Tipi di Controllo e Combinazioni</a></li>
+<li><a href="#223-esempio-annotato">2.2.3 Esempio Annotato</a></li>
+</ul>
+</li>
+<li><a href="#23-workflow-configurazione-end-to-end">2.3 Workflow Configurazione End-to-End</a><ul>
+<li><a href="#231-checklist-configurazione-nuovo-flusso">2.3.1 Checklist Configurazione Nuovo Flusso</a></li>
+<li><a href="#232-diagramma-relazionale-configurazione">2.3.2 Diagramma Relazionale Configurazione</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="3-flussi-di-output">📤 <a href="#3-flussi-di-output">3. Flussi di Output</a></h3>
+<ul>
+<li><a href="#31-file-di-scarto-ko">3.1 File di Scarto (.ko)</a><ul>
+<li><a href="#311-struttura-del-file-di-scarto">3.1.1 Struttura del File di Scarto</a></li>
+<li><a href="#312-esempio-file-csv">3.1.2 Esempio File CSV</a></li>
+<li><a href="#313-esempio-file-fixed-fixed-width">3.1.3 Esempio File FIXED</a></li>
+<li><a href="#314-utilizzo-operativo">3.1.4 Utilizzo Operativo</a></li>
+</ul>
+</li>
+<li><a href="#32-anagrafica-codici-errore-codici">3.2 Anagrafica Codici Errore (.codici)</a><ul>
+<li><a href="#321-struttura-del-file">3.2.1 Struttura del File</a></li>
+<li><a href="#322-utilizzo-operativo">3.2.2 Utilizzo Operativo</a></li>
+</ul>
+</li>
+<li><a href="#33-report-statistiche-stats">3.3 Report Statistiche (.stats)</a><ul>
+<li><a href="#331-struttura-del-report">3.3.1 Struttura del Report</a></li>
+<li><a href="#332-esempio-report-reale">3.3.2 Esempio Report Reale</a></li>
+<li><a href="#333-utilizzo-operativo">3.3.3 Utilizzo Operativo</a></li>
+</ul>
+</li>
+<li><a href="#34-file-di-log">3.4 File di Log</a><ul>
+<li><a href="#341-struttura-del-log">3.4.1 Struttura del Log</a></li>
+<li><a href="#342-contenuto-del-log">3.4.2 Contenuto del Log</a></li>
+<li><a href="#343-livelli-di-logging">3.4.3 Livelli di Logging</a></li>
+<li><a href="#344-esempio-log-completo-estratto-reale">3.4.4 Esempio Log Completo</a></li>
+<li><a href="#345-utilizzo-operativo">3.4.5 Utilizzo Operativo</a></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="0-installazione-e-deployment_1">📦 0. Installazione e Deployment</h2>
+<p>Il <strong><em>Data Quality Framework</em></strong> viene distribuito come <strong>eseguibile binario standalone</strong> per le piattaforme <strong>Windows</strong> e <strong>Linux</strong>, consentendo l'esecuzione su sistemi target <strong>senza richiedere l'installazione di Python</strong> o librerie esterne.</p>
+<p>Questa sezione descrive i requisiti di sistema, la struttura del package di distribuzione, la procedura di installazione e la verifica del corretto funzionamento del framework.</p>
+<hr />
+<h3 id="01-requisiti-di-sistema">0.1 Requisiti di Sistema</h3>
+<p>Il framework è stato progettato per operare su sistemi enterprise con i seguenti requisiti minimi:</p>
+<h4 id="requisiti-hardware"><strong>Requisiti Hardware</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Requisito Minimo</th>
+<th>Requisito Consigliato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CPU</strong></td>
+<td>2 core</td>
+<td>4+ core (per elaborazione multi-worker)</td>
+</tr>
+<tr>
+<td><strong>RAM</strong></td>
+<td>2 GB</td>
+<td>4 GB (per file &gt;500MB)</td>
+</tr>
+<tr>
+<td><strong>Disco</strong></td>
+<td>1 GB liberi</td>
+<td>10 GB liberi (per log e output)</td>
+</tr>
+<tr>
+<td><strong>I/O Disco</strong></td>
+<td>Standard HDD</td>
+<td>SSD (per file &gt;1GB)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="requisiti-software"><strong>Requisiti Software</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Piattaforma</th>
+<th>Versione Sistema Operativo</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Windows</strong></td>
+<td>Windows Server 2012 R2+ <br/> Windows 10+</td>
+<td>Eseguibile nativo .exe</td>
+</tr>
+<tr>
+<td><strong>Linux</strong></td>
+<td>RHEL 7+ / CentOS 7+ <br/> Ubuntu 18.04+ <br/> Debian 9+</td>
+<td>Binario ELF64</td>
+</tr>
+</tbody>
+</table>
+<h4 id="dipendenze-runtime"><strong>Dipendenze Runtime</strong></h4>
+<ul>
+<li>✅ <strong>Nessuna dipendenza Python richiesta</strong> sul sistema target</li>
+<li>✅ <strong>Nessuna libreria esterna</strong> da installare</li>
+<li>✅ <strong>Binario completamente standalone</strong> con Python embedded</li>
+</ul>
+<p>Il framework è stato compilato con <strong>PyInstaller</strong> in modalità <strong>--onefile</strong>, incorporando l'interprete Python 3.9+ e tutte le librerie standard necessarie.</p>
+<hr />
+<h3 id="02-package-di-distribuzione">0.2 Package di Distribuzione</h3>
+<p>Il framework viene distribuito in <strong>package completi multi-piattaforma</strong> contenenti:
+- Script Python eseguibili
+- Dati demo completi (CSV e FIXED)
+- Script test automatici (Windows + Linux/macOS)
+- Configurazioni sistema e flussi
+- Documentazione completa (Markdown + HTML)</p>
+<p><strong>Dimensione package:</strong> ~25-30 MB compressi</p>
+<p><strong>Formato distribuzione:</strong>
+- <strong>Windows:</strong> <code>.zip</code> (estrazione con <code>Expand-Archive</code> o tool grafico)
+- <strong>Linux/macOS:</strong> <code>.tar.gz</code> (estrazione con <code>tar -xzf</code>)</p>
+<p><strong>Contenuto Package (identico su tutte le piattaforme):</strong></p>
+<pre class="codehilite"><code>DataQualityFramework_v1.0.0.zip / .tar.gz
+│
+├── bin/                               # Script Python eseguibili
+│   ├── DataQualityFramework.py        # Entry point principale
+│   ├── csv_to_fixed_clienti.py        # Utility conversione
+│   └── main.py                        # Alias entry point
+│
+├── cfg/                               # Configurazioni sistema
+│   └── DataQualityFramework.cfg       # Config globale framework
+│
+├── demo/                              # Dati demo completi
+│   ├── csv/                           # Demo CSV con input/output
+│   │   ├── cfg/flows/                 # Config flusso CSV
+│   │   ├── cfg/layouts/               # Tracciato CSV
+│   │   ├── input/pending/             # 3+ file CSV esempio
+│   │   └── output/                    # Directory output (4 tipi)
+│   │       ├── success/               # .ok files
+│   │       ├── error/                 # .ko files
+│   │       ├── report/                # .codici files
+│   │       └── statistics/            # .stats files
+│   │
+│   └── fixed/                         # Demo FIXED con input/output
+│       ├── cfg/flows/                 # Config flusso FIXED
+│       ├── cfg/layouts/               # Tracciato FIXED
+│       ├── input/pending/             # 3+ file FIXED esempio
+│       ├── output/                    # Directory output (4 tipi)
+│       └── archive/                   # File archiviati
+│
+├── docs/                              # Manuali Markdown
+│   └── Data_Quality_Framework_Guida.md     # Guida completa (2100+ righe)
+│
+├── docs_html/                         # Manuali HTML navigabili
+│   └── Data_Quality_Framework_Guida.html   # Versione web della guida
+│
+├── bat/                               # Script test automatici
+│   ├── test_csv.bat                   # Test CSV (Windows)
+│   ├── test_fixed.bat                 # Test FIXED (Windows)
+│   ├── test_all.bat                   # Suite completa (Windows)
+│   ├── test_csv.sh                    # Test CSV (Linux/macOS)
+│   ├── test_fixed.sh                  # Test FIXED (Linux/macOS)
+│   ├── test_all.sh                    # Suite completa (Linux/macOS)
+│   └── README.md                      # Documentazione script test
+│
+├── log/                               # Directory log (vuota, auto-creata)
+│
+├── CHANGELOG.md                       # Storia versioni
+├── LICENSE                            # Licenza MIT 2025
+├── README.md                          # Quick start
+├── RELEASE_NOTES.md                   # Note release
+└── PRE_RELEASE_CHECKLIST.md           # Checklist pre-release
+</code></pre>
+
+<p><strong>Differenze per Piattaforma:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Aspetto</th>
+<th>Windows</th>
+<th>Linux/macOS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Formato archive</strong></td>
+<td><code>.zip</code></td>
+<td><code>.tar.gz</code></td>
+</tr>
+<tr>
+<td><strong>Line endings</strong></td>
+<td>CRLF (<code>\r\n</code>)</td>
+<td>LF (<code>\n</code>)</td>
+</tr>
+<tr>
+<td><strong>Script esecuzione</strong></td>
+<td><code>.bat</code> funzionanti</td>
+<td><code>.sh</code> funzionanti (con <code>chmod +x</code>)</td>
+</tr>
+<tr>
+<td><strong>Comando Python</strong></td>
+<td><code>python</code></td>
+<td><code>python3</code></td>
+</tr>
+<tr>
+<td><strong>Path separator</strong></td>
+<td><code>\</code> (backslash)</td>
+<td><code>/</code> (forward slash)</td>
+</tr>
+<tr>
+<td><strong>Contenuto files</strong></td>
+<td>✅ Identico</td>
+<td>✅ Identico</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nota Importante:</strong> Il contenuto del package (file Python, dati demo, configurazioni, documentazione) è <strong>identico</strong> su tutte le piattaforme. Le uniche differenze sono:
+- Formato compressione dell'archivio
+- Line endings dei file di testo
+- Script test (.bat per Windows, .sh per Linux/macOS già inclusi in entrambi i package)</p>
+<p><strong>Cosa Include il Package:</strong></p>
+<ul>
+<li>✅ <strong>Script Python</strong> completi (bin/)</li>
+<li>✅ <strong>Dati Demo</strong> funzionanti (demo/csv/, demo/fixed/)</li>
+<li>✅ <strong>Script Test</strong> per entrambe le piattaforme (bat/<em>.bat + bat/</em>.sh)</li>
+<li>✅ <strong>Configurazioni</strong> sistema e flussi (cfg/)</li>
+<li>✅ <strong>Documentazione</strong> completa Markdown + HTML (docs/, docs_html/)</li>
+<li>✅ <strong>File Release</strong> (CHANGELOG, LICENSE, README, RELEASE_NOTES, PRE_RELEASE_CHECKLIST)</li>
+</ul>
+<p><strong>Cosa NON Include:</strong></p>
+<ul>
+<li>🚫 Directory <code>.git/</code> (repository Git)</li>
+<li>🚫 Directory <code>.vscode/</code> (impostazioni IDE)</li>
+<li>🚫 Directory <code>lib/</code> (librerie sviluppo - non necessarie)</li>
+<li>🚫 Directory <code>utility/</code> (tool build e conversione - solo per sviluppatori)</li>
+<li>🚫 File temporanei <code>.pyc</code>, <code>__pycache__/</code></li>
+<li>🚫 Log precedenti (log/ vuota in distribuzione)</li>
+</ul>
+<hr />
+<h3 id="03-struttura-directory-del-package">0.3 Struttura Directory del Package</h3>
+<p>Il package rilasciato presenta la seguente struttura completa con tutte le directory e file distribuiti:</p>
+<pre class="codehilite"><code>DataQualityFramework/                 # Directory root installazione
+│
+├── 🔵 bin/                           # BINARI ESEGUIBILI
+│   ├── DataQualityFramework.py       # Script principale Python
+│   ├── csv_to_fixed_clienti.py       # Utility conversione CSV→FIXED
+│   ├── DataQualityFramework.py       # Entry point applicazione
+│   └── main.py                       # Main script (alias)
+│
+├── ⚙️ cfg/                           # CONFIGURAZIONI SISTEMA
+│   └── DataQualityFramework.cfg      # Config globale (paths, logging, defaults)
+│
+├── 📁 demo/                          # ESEMPI DEMO FUNZIONANTI
+│   │
+│   ├── csv/                          # Demo validazione CSV
+│   │   ├── cfg/
+│   │   │   ├── flows/
+│   │   │   │   └── dipendenti_csv.cfg         # Config flusso demo CSV
+│   │   │   └── layouts/
+│   │   │       ├── dipendenti_csv_layout.csv  # Tracciato demo CSV
+│   │   │       └── README.md                  # Documentazione layout
+│   │   │
+│   │   ├── input/
+│   │   │   ├── pending/               # File CSV da elaborare
+│   │   │   │   ├── dipendenti_csv_20251101.csv
+│   │   │   │   ├── dipendenti_csv_20251102.csv
+│   │   │   │   └── dipendenti_csv_20251103.csv
+│   │   │   └── skipped/               # File saltati (se configurato)
+│   │   │
+│   │   └── output/                    # OUTPUT ELABORAZIONI DEMO
+│   │       ├── success/               # File validati (.ok)
+│   │       ├── error/                 # File scartati (.ko)
+│   │       ├── report/                # Anagrafica errori (.codici)
+│   │       └── statistics/            # Report statistiche (.stats)
+│   │
+│   └── fixed/                         # Demo validazione FIXED
+│       ├── cfg/
+│       │   ├── flows/
+│       │   │   └── dipendenti_fixed.cfg       # Config flusso demo FIXED
+│       │   └── layouts/
+│       │       └── dipendenti_fixed_layout.csv # Tracciato demo FIXED
+│       │
+│       ├── input/
+│       │   ├── pending/               # File FIXED da elaborare
+│       │   │   ├── dipendenti_fixed_20251101.dat
+│       │   │   ├── dipendenti_fixed_20251102.dat
+│       │   │   └── dipendenti_fixed_20251103.dat
+│       │   └── skipped/               # File saltati (se configurato)
+│       │
+│       ├── output/                    # OUTPUT ELABORAZIONI DEMO
+│       │   ├── success/               # File validati (.ok)
+│       │   ├── error/                 # File scartati (.ko)
+│       │   ├── report/                # Anagrafica errori (.codici)
+│       │   └── statistics/            # Report statistiche (.stats)
+│       │
+│       └── archive/                   # File archiviati (demo)
+│
+├── 📄 docs/                          # DOCUMENTAZIONE COMPLETA
+│   └── Data_Quality_Framework_Guida.md       # Manuale completo (2100+ righe)
+│
+├── 🌐 docs_html/                     # DOCUMENTAZIONE HTML
+│   └── Data_Quality_Framework_Guida.html     # Versione web della guida completa
+│
+├── 📝 log/                           # LOG RUNTIME (auto-generati)
+│   └── *.log                          # File log elaborazioni timestampati
+│
+├── 🧪 bat/                           # SCRIPT TEST AUTOMATICI
+│   ├── test_csv.bat                   # Test validazione CSV (Windows)
+│   ├── test_fixed.bat                 # Test validazione FIXED (Windows)
+│   ├── test_all.bat                   # Test suite completa (Windows)
+│   ├── test_csv.sh                    # Test validazione CSV (Linux/macOS)
+│   ├── test_fixed.sh                  # Test validazione FIXED (Linux/macOS)
+│   ├── test_all.sh                    # Test suite completa (Linux/macOS)
+│   └── README.md                      # Documentazione script test
+│
+├──  CHANGELOG.md                    # Storia completa versioni
+├── 📜 LICENSE                         # Licenza MIT 2025
+├── 📖 README.md                       # Quick start e panoramica
+├── 📝 RELEASE_NOTES.md                # Note release v1.0.0
+└── ✅ PRE_RELEASE_CHECKLIST.md        # Checklist pre-pubblicazione
+</code></pre>
+
+<p><strong>Componenti del Package:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>Tipo</th>
+<th>Contenuto</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bin/</code></td>
+<td><strong>Eseguibili</strong></td>
+<td>Script Python principali</td>
+<td>Entry point applicazione</td>
+</tr>
+<tr>
+<td><code>cfg/</code></td>
+<td><strong>Configurazione</strong></td>
+<td>File <code>.cfg</code> sistema</td>
+<td>1 config globale framework</td>
+</tr>
+<tr>
+<td><code>demo/csv/</code></td>
+<td><strong>Demo CSV</strong></td>
+<td>Esempio completo validazione CSV</td>
+<td>3 file input + output</td>
+</tr>
+<tr>
+<td><code>demo/fixed/</code></td>
+<td><strong>Demo FIXED</strong></td>
+<td>Esempio completo validazione FIXED</td>
+<td>3 file input + output</td>
+</tr>
+<tr>
+<td><code>docs/</code></td>
+<td><strong>Manuale MD</strong></td>
+<td>Documentazione Markdown</td>
+<td>1 Guida completa (2100+ righe)</td>
+</tr>
+<tr>
+<td><code>docs_html/</code></td>
+<td><strong>Manuale HTML</strong></td>
+<td>Versione web della guida</td>
+<td>1 file HTML navigabile</td>
+</tr>
+<tr>
+<td><code>log/</code></td>
+<td><strong>Log Runtime</strong></td>
+<td>File log timestampati</td>
+<td>Auto-generati dal framework</td>
+</tr>
+<tr>
+<td><code>bat/</code></td>
+<td><strong>Test Scripts</strong></td>
+<td>Script test Windows/Linux/macOS</td>
+<td>6 script + README</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Directory di Output (create automaticamente):</strong></p>
+<p>Ogni demo include le seguenti sottodirectory di output:</p>
+<table>
+<thead>
+<tr>
+<th>Directory Output</th>
+<th>Estensione File</th>
+<th>Descrizione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>output/success/</code></td>
+<td><code>.ok</code></td>
+<td>Record validati con successo</td>
+</tr>
+<tr>
+<td><code>output/error/</code></td>
+<td><code>.ko</code></td>
+<td>Record scartati con codici errore</td>
+</tr>
+<tr>
+<td><code>output/report/</code></td>
+<td><code>.codici</code></td>
+<td>Anagrafica errori con conteggi</td>
+</tr>
+<tr>
+<td><code>output/statistics/</code></td>
+<td><code>.stats</code></td>
+<td>Report statistiche dettagliate</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Separazione Codice vs Configurazione:</strong></p>
+<p>Il design del framework separa nettamente:</p>
+<ul>
+<li><strong>CODICE</strong> (<code>bin/</code>): Script Python eseguibili (logica business)</li>
+<li><strong>CONFIGURAZIONE</strong> (<code>cfg/</code>, <code>demo/*/cfg/</code>): File <code>.cfg</code> e tracciati <code>.csv</code> modificabili</li>
+<li><strong>DATI</strong> (<code>demo/*/input/</code>, <code>demo/*/output/</code>): File input/output gestiti dal framework</li>
+<li><strong>DOCUMENTAZIONE</strong> (<code>docs/</code>, <code>docs_html/</code>): Manuali utente completi</li>
+<li><strong>TEST</strong> (<code>bat/</code>): Script test automatici per verifica installazione</li>
+</ul>
+<p>Questa architettura permette di:
+- ✅ Modificare configurazioni e tracciati senza toccare il codice
+- ✅ Versionare separatamente codice, configurazioni e documentazione
+- ✅ Testare rapidamente con script automatici (<code>bat/</code>)
+- ✅ Consultare manuali offline (Markdown e HTML)
+- ✅ Eseguire demo funzionanti immediatamente dopo installazione</p>
+<hr />
+<h3 id="04-procedura-di-installazione">0.4 Procedura di Installazione</h3>
+<h4 id="041-installazione-su-windows">0.4.1 Installazione su Windows</h4>
+<p><strong>Passo 1: Download del Package</strong></p>
+<p>Scaricare il file <code>DataQualityFramework_v1.0.0_Windows.zip</code> dal repository.</p>
+<p><strong>Passo 2: Estrazione Files</strong></p>
+<pre class="codehilite"><code class="language-cmd"># Estrarre in una directory dedicata (esempio: C:\DataQualityFramework)
+cd C:\
+Expand-Archive -Path &quot;DataQualityFramework_v1.0.0_Windows.zip&quot; -DestinationPath &quot;C:\DataQualityFramework&quot;
+</code></pre>
+
+<p><strong>Passo 3: Verifica Struttura</strong></p>
+<pre class="codehilite"><code class="language-cmd">cd C:\DataQualityFramework
+dir /B
+
+# Output atteso:
+# bin
+# cfg
+# demo
+# docs
+# log
+# CHANGELOG.md
+# LICENSE
+# README.md
+</code></pre>
+
+<p><strong>Passo 4: (Opzionale) Aggiunta al PATH</strong></p>
+<p>Per eseguire il framework da qualsiasi directory:</p>
+<pre class="codehilite"><code class="language-cmd"># Aggiungere al PATH di sistema (richiede privilegi amministratore)
+setx PATH &quot;%PATH%;C:\DataQualityFramework\bin&quot; /M
+</code></pre>
+
+<p><strong>Passo 5: Test Esecuzione</strong></p>
+<pre class="codehilite"><code class="language-cmd"># Test help
+C:\DataQualityFramework\bin\DataQualityFramework.exe --help
+
+# Test demo CSV
+C:\DataQualityFramework\bin\DataQualityFramework.exe DIPENDENTI_CSV
+
+# Test demo FIXED
+C:\DataQualityFramework\bin\DataQualityFramework.exe DIPENDENTI_FIXED
+</code></pre>
+
+<hr />
+<h4 id="042-installazione-su-linux">0.4.2 Installazione su Linux</h4>
+<p><strong>Passo 1: Download del Package</strong></p>
+<pre class="codehilite"><code class="language-bash"># Download in directory temporanea
+cd /tmp
+wget https://github.com/tuorepository/DataQualityFramework/releases/download/v1.0.0/DataQualityFramework_v1.0.0_Linux.tar.gz
+</code></pre>
+
+<p><strong>Passo 2: Estrazione Files</strong></p>
+<pre class="codehilite"><code class="language-bash"># Estrazione in directory opt (raccomandato per software enterprise)
+sudo mkdir -p /opt/DataQualityFramework
+sudo tar -xzf DataQualityFramework_v1.0.0_Linux.tar.gz -C /opt/DataQualityFramework
+</code></pre>
+
+<p><strong>Passo 3: Permessi Esecuzione</strong></p>
+<pre class="codehilite"><code class="language-bash"># Rendere eseguibile il binario
+sudo chmod +x /opt/DataQualityFramework/bin/DataQualityFramework
+</code></pre>
+
+<p><strong>Passo 4: (Opzionale) Link Simbolico</strong></p>
+<p>Per eseguire il framework da qualsiasi directory:</p>
+<pre class="codehilite"><code class="language-bash"># Creare link simbolico in /usr/local/bin
+sudo ln -s /opt/DataQualityFramework/bin/DataQualityFramework /usr/local/bin/dataqualityframework
+</code></pre>
+
+<p><strong>Passo 5: Verifica Permessi Directory</strong></p>
+<pre class="codehilite"><code class="language-bash"># Verificare che l'utente abbia permessi su cfg/ e log/
+cd /opt/DataQualityFramework
+ls -la
+
+# Se necessario, modificare ownership
+sudo chown -R utente:gruppo /opt/DataQualityFramework
+</code></pre>
+
+<p><strong>Passo 6: Test Esecuzione</strong></p>
+<pre class="codehilite"><code class="language-bash"># Test help
+/opt/DataQualityFramework/bin/DataQualityFramework --help
+
+# Test demo CSV
+/opt/DataQualityFramework/bin/DataQualityFramework DIPENDENTI_CSV
+
+# Test demo FIXED
+/opt/DataQualityFramework/bin/DataQualityFramework DIPENDENTI_FIXED
+</code></pre>
+
+<hr />
+<h3 id="05-verifica-installazione">0.5 Verifica Installazione</h3>
+<p>Dopo l'installazione, eseguire i seguenti controlli per verificare il corretto funzionamento:</p>
+<h4 id="test-1-verifica-help"><strong>Test 1: Verifica Help</strong></h4>
+<pre class="codehilite"><code class="language-bash"># Windows
+C:\DataQualityFramework\bin\DataQualityFramework.exe --help
+
+# Linux
+/opt/DataQualityFramework/bin/DataQualityFramework --help
+</code></pre>
+
+<p><strong>Output Atteso:</strong></p>
+<pre class="codehilite"><code>Data Quality Framework v1.0.0
+
+Utilizzo: DataQualityFramework &lt;NOME_FLUSSO&gt;
+
+Argomenti:
+  NOME_FLUSSO    Nome del flusso da elaborare (es: DIPENDENTI_CSV)
+
+Opzioni:
+  --help         Mostra questo messaggio
+  --version      Mostra versione framework
+
+Esempi:
+  DataQualityFramework DIPENDENTI_CSV
+  DataQualityFramework ANAGRAFICA_CLIENTI
+</code></pre>
+
+<h4 id="test-2-elaborazione-demo-csv"><strong>Test 2: Elaborazione Demo CSV</strong></h4>
+<pre class="codehilite"><code class="language-bash"># Windows
+cd C:\DataQualityFramework
+bin\DataQualityFramework.exe DIPENDENTI_CSV
+
+# Linux
+cd /opt/DataQualityFramework
+bin/DataQualityFramework DIPENDENTI_CSV
+</code></pre>
+
+<p><strong>Output Atteso:</strong></p>
+<pre class="codehilite"><code>═══════════════════════════════════════════════════════════════════════════════
+  DATA QUALITY FRAMEWORK v1.0.0 - Avvio Elaborazione
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ Configurazione caricata: cfg/DataQualityFramework.cfg
+✅ Flusso selezionato: DIPENDENTI_CSV
+✅ Tracciato caricato: demo/csv/cfg/layouts/dipendenti_csv_layout.csv
+✅ File input trovati: 3 file
+
+📊 Elaborazione in corso...
+
+═══════════════════════════════════════════════════════════════════════════════
+  ELABORAZIONE COMPLETATA CON SUCCESSO
+═══════════════════════════════════════════════════════════════════════════════
+
+📂 Output generati:
+   ✅ File validati: demo/csv/output/success/*.ok
+   ❌ File scartati: demo/csv/output/error/*.ko
+   📋 Codici errore: demo/csv/output/report/*.codici
+   📊 Statistiche: demo/csv/output/statistics/*.stats
+   📝 Log: log/DataQualityFramework_20251112_143022.log
+</code></pre>
+
+<h4 id="test-3-verifica-file-output"><strong>Test 3: Verifica File Output</strong></h4>
+<pre class="codehilite"><code class="language-bash"># Windows
+dir demo\csv\output\success\*.ok
+dir demo\csv\output\error\*.ko
+dir demo\csv\output\report\*.codici
+dir demo\csv\output\statistics\*.stats
+
+# Linux
+ls -lh demo/csv/output/success/*.ok
+ls -lh demo/csv/output/error/*.ko
+ls -lh demo/csv/output/report/*.codici
+ls -lh demo/csv/output/statistics/*.stats
+</code></pre>
+
+<p><strong>Verifica Contenuto:</strong></p>
+<p>Ogni test deve produrre <strong>4 file</strong> (uno per ciascuna estensione <code>.ok</code>, <code>.ko</code>, <code>.codici</code>, <code>.stats</code>).</p>
+<h4 id="test-4-controllo-log"><strong>Test 4: Controllo Log</strong></h4>
+<pre class="codehilite"><code class="language-bash"># Windows
+type log\DataQualityFramework_*.log | findstr /C:&quot;ERROR&quot; /C:&quot;CRITICAL&quot;
+
+# Linux
+grep -E &quot;ERROR|CRITICAL&quot; log/DataQualityFramework_*.log
+</code></pre>
+
+<p><strong>Risultato Atteso:</strong> Nessun errore CRITICAL (possibili WARNING fisiologici).</p>
+<hr />
+<h3 id="06-troubleshooting-deployment">0.6 Troubleshooting Deployment</h3>
+<h4 id="problema-eseguibile-non-trovato-windows"><strong>Problema: "Eseguibile non trovato" (Windows)</strong></h4>
+<p><strong>Sintomo:</strong></p>
+<pre class="codehilite"><code>'DataQualityFramework.exe' non è riconosciuto come comando interno o esterno
+</code></pre>
+
+<p><strong>Causa:</strong> Eseguibile non nel PATH o path errato</p>
+<p><strong>Soluzione:</strong></p>
+<pre class="codehilite"><code class="language-cmd"># Utilizzare path assoluto
+C:\DataQualityFramework\bin\DataQualityFramework.exe DIPENDENTI_CSV
+
+# Oppure navigare nella directory bin
+cd C:\DataQualityFramework\bin
+DataQualityFramework.exe DIPENDENTI_CSV
+</code></pre>
+
+<hr />
+<h4 id="problema-permission-denied-linux"><strong>Problema: "Permission denied" (Linux)</strong></h4>
+<p><strong>Sintomo:</strong></p>
+<pre class="codehilite"><code class="language-bash">bash: /opt/DataQualityFramework/bin/DataQualityFramework: Permission denied
+</code></pre>
+
+<p><strong>Causa:</strong> Binario non ha permessi di esecuzione</p>
+<p><strong>Soluzione:</strong></p>
+<pre class="codehilite"><code class="language-bash"># Aggiungere permesso esecuzione
+sudo chmod +x /opt/DataQualityFramework/bin/DataQualityFramework
+
+# Verificare permessi
+ls -l /opt/DataQualityFramework/bin/DataQualityFramework
+# Output: -rwxr-xr-x  (la 'x' indica eseguibile)
+</code></pre>
+
+<hr />
+<h4 id="problema-file-di-configurazione-non-trovato"><strong>Problema: "File di configurazione non trovato"</strong></h4>
+<p><strong>Sintomo:</strong></p>
+<pre class="codehilite"><code>ERRORE CRITICO: File cfg/DataQualityFramework.cfg non trovato
+</code></pre>
+
+<p><strong>Causa:</strong> Working directory errata o configurazione mancante</p>
+<p><strong>Soluzione:</strong></p>
+<pre class="codehilite"><code class="language-bash"># Verificare che il comando venga eseguito dalla directory root del framework
+# Windows
+cd C:\DataQualityFramework
+bin\DataQualityFramework.exe DIPENDENTI_CSV
+
+# Linux
+cd /opt/DataQualityFramework
+bin/DataQualityFramework DIPENDENTI_CSV
+
+# Verificare presenza configurazione
+# Windows: dir cfg\DataQualityFramework.cfg
+# Linux: ls -l cfg/DataQualityFramework.cfg
+</code></pre>
+
+<hr />
+<h4 id="problema-impossibile-scrivere-log"><strong>Problema: "Impossibile scrivere log"</strong></h4>
+<p><strong>Sintomo:</strong></p>
+<pre class="codehilite"><code>ERROR: Unable to create log directory
+</code></pre>
+
+<p><strong>Causa:</strong> Permessi insufficienti sulla directory <code>log/</code></p>
+<p><strong>Soluzione (Linux):</strong></p>
+<pre class="codehilite"><code class="language-bash"># Verificare ownership directory log
+ls -ld /opt/DataQualityFramework/log
+
+# Modificare ownership se necessario
+sudo chown -R utente:gruppo /opt/DataQualityFramework/log
+
+# Verificare permessi scrittura
+sudo chmod 755 /opt/DataQualityFramework/log
+</code></pre>
+
+<p><strong>Soluzione (Windows):</strong></p>
+<pre class="codehilite"><code class="language-cmd"># Verificare permessi NTFS sulla cartella log
+# Click destro su log/ → Proprietà → Sicurezza → Verifica permessi scrittura per utente corrente
+</code></pre>
+
+<hr />
+<h4 id="problema-binario-si-blocca-allavvio"><strong>Problema: "Binario si blocca all'avvio"</strong></h4>
+<p><strong>Sintomo:</strong> Il comando non produce output e rimane bloccato</p>
+<p><strong>Causa:</strong> Possibile conflitto antivirus o firewall</p>
+<p><strong>Soluzione:</strong></p>
+<pre class="codehilite"><code class="language-bash"># Windows: Aggiungere eccezione Windows Defender
+Add-MpPreference -ExclusionPath &quot;C:\DataQualityFramework\bin\DataQualityFramework.exe&quot;
+
+# Eseguire in modalità verbose per diagnostica
+# (nota: opzione --verbose da implementare in versione futura)
+</code></pre>
+
+<hr />
+<h4 id="problema-glibc-version-mismatch-linux"><strong>Problema: "GLIBC version mismatch" (Linux)</strong></h4>
+<p><strong>Sintomo:</strong></p>
+<pre class="codehilite"><code>./DataQualityFramework: /lib64/libc.so.6: version `GLIBC_2.XX' not found
+</code></pre>
+
+<p><strong>Causa:</strong> Binario compilato con GLIBC più recente di quella disponibile sul sistema</p>
+<p><strong>Soluzione:</strong></p>
+<pre class="codehilite"><code class="language-bash"># Verificare versione GLIBC sul sistema
+ldd --version
+
+# Se GLIBC &lt; 2.17, richiedere binario compilato per versioni legacy
+# Oppure eseguire su sistema con GLIBC aggiornata (es: RHEL 7+ / Ubuntu 18.04+)
+</code></pre>
+
+<hr />
+<p><strong>Per supporto tecnico o problemi non coperti da questa guida, consultare:</strong>
+- 📖 Documentazione completa: <code>docs/Data_Quality_Framework_Guida.html</code>
+- 📋 Issue tracker GitHub: <code>https://github.com/tuorepository/DataQualityFramework/issues</code>
+- 📧 Email supporto: <code>alberto.robetti@example.com</code></p>
+<hr />
+<h2 id="1-introduzione-e-panoramica_1">�📖 1. Introduzione e Panoramica</h2>
+<p>Il <strong><em>Data Quality Framework</em></strong> nasce per rispondere all'esigenza, presente nella maggior parte dei sistemi informativi, di verificare che i flussi dati rispettino specifiche regole di qualità, coerenza e formato.</p>
+<p>Questo strumento di validazione automatica consente di verificare la conformità degli attributi che compongono un flusso di dati strutturati (formato CSV delimitato o a lunghezza fissa FIXED), garantendo che solo i record conformi vengano utilizzati nei processi aziendali.</p>
+<p>Il framework legge i file di input, esegue il parsing degli attributi e applica regole configurabili per la validazione di ogni riga. Il sistema applica controlli su ciascun attributo del dataset, verificando:</p>
+<ul>
+<li><strong>Obbligatorietà</strong> - Presenza del valore nei campi definiti come mandatory</li>
+<li><strong>Conformità di formato</strong> - Aderenza a pattern standard (date, numeri, codici alfanumerici)</li>
+<li><strong>Appartenenza a domini</strong> - Validazione del valore rispetto a liste di valori ammessi</li>
+<li><strong>Range di valori</strong> - Verifica che numeri e date rientrino negli intervalli configurati</li>
+<li><strong>Correttezza formale</strong> - Validazione di codici standardizzati (Codice Fiscale, Partita IVA, IBAN, email)</li>
+</ul>
+<p>I record che superano i controlli vengono inseriti in un flusso dedicato, mentre quelli non conformi vengono gestiti separatamente con dettagli sugli errori riscontrati. Il sistema genera inoltre una reportistica che evidenzia il livello di qualità e fornisce statistiche sui dati processati.</p>
+<p>Le regole di validazione sono definite e configurate in modo dichiarativo attraverso un file di tracciato in formato CSV, consentendo di modificare i controlli di qualità senza alcun intervento sul codice sorgente del framework.</p>
+<p><strong>Vantaggi della soluzione:</strong></p>
+<ul>
+<li><strong>Riutilizzabilità</strong>: non è necessario implementare i controlli ogni volta; il framework può essere utilizzato su diversi flussi e tracciati.</li>
+<li><strong>Configurabilità</strong>: le regole di controllo sono facilmente adattabili alle esigenze specifiche, senza interventi sul codice.</li>
+<li><strong>Ridotto effort</strong>: la configurazione e l'adattamento richiedono poco tempo e risorse.</li>
+<li><strong>Risparmio di tempo</strong>: l'automazione dei controlli accelera i processi di verifica e onboarding dei dati.</li>
+<li><strong>Sicurezza e affidabilità</strong>: la soluzione garantisce che i controlli siano sempre applicati correttamente, riducendo il rischio di errori.</li>
+<li><strong>Saving di coding e test</strong>: si riduce la necessità di sviluppare e testare nuove logiche di controllo per ogni flusso.</li>
+<li><strong>Garanzia sulla qualità del dato</strong>: solo i dati validi alimentano i sistemi aziendali, migliorando la qualità complessiva delle informazioni.</li>
+</ul>
+<hr />
+<h3 id="11-architettura-ad-alto-livello">1.1 Architettura ad alto livello</h3>
+<p>Questa sezione descrive l'architettura generale del <strong><em>Data Quality Framework</em></strong> attraverso un diagramma ad alto livello che mostra il flusso completo dei dati: dagli <strong>input</strong> (file dati e configurazioni), attraverso l'<strong>elaborazione</strong> del framework, fino agli <strong>output</strong> prodotti (file validati, scartati, report e log).</p>
+<p>Il diagramma seguente illustra i <strong>quattro file di input</strong> necessari all'esecuzione (dati, tracciato, configurazione processo e flusso), il <strong>motore di validazione</strong> centrale che coordina tutte le operazioni, e i <strong>cinque tipi di output</strong> generati automaticamente per ogni elaborazione. Ogni componente è colorato per facilitare la comprensione: input in blu, elaborazione in arancione, output in verde.</p>
+<p>Prima di avviare la validazione dei dati, il framework esegue <strong>controlli preliminari sui file di configurazione</strong> per garantire che:
+- Tutti i file necessari esistano e siano accessibili
+- La struttura del tracciato sia corretta (colonne obbligatorie presenti)
+- I parametri di configurazione siano coerenti e validi
+- I path delle directory di output siano raggiungibili</p>
+<p>Solo dopo il superamento di queste verifiche iniziali, il sistema procede con l'elaborazione record-by-record dei dati applicando le regole di validazione configurate.</p>
+<div class="mermaid">flowchart TB
+    subgraph input[&quot; &quot;]
+        direction TB
+        A1[&quot;👤 File CSV/FIXED Dati&lt;br/&gt;&lt;small&gt;dati da validare&lt;/small&gt;&quot;]
+        A2[&quot;👨‍💼 Tracciato CSV&lt;br/&gt;&lt;small&gt;regole di validazione&lt;/small&gt;&quot;]
+        A3[&quot;⚙️ File Configurazione Processo&lt;br/&gt;&lt;small&gt;parametri sistema&lt;/small&gt;&quot;]
+        A4[&quot;⚙️ File Configurazione Flusso&lt;br/&gt;&lt;small&gt;parametri specifici&lt;/small&gt;&quot;]
+    end
+
+    subgraph framework[&quot; &quot;]
+        direction TB
+        B[&quot;🔧 FRAMEWORK VALIDAZIONE&lt;br/&gt;&lt;br/&gt;• Controlli preliminari CFG&lt;br/&gt;• Legge i file&lt;br/&gt;• Applica le regole&lt;br/&gt;• Valida ogni record&lt;br/&gt;• Genera i report&quot;]
+    end
+
+    subgraph output[&quot; &quot;]
+        direction TB
+        C1[&quot;✅ Record Validi&lt;br/&gt;&lt;small&gt;dati certificati (.ok)&lt;/small&gt;&quot;]
+        C2[&quot;❌ Record Scartati&lt;br/&gt;&lt;small&gt;con codici errore (.ko)&lt;/small&gt;&quot;]
+        C3[&quot;📋 Lista Codici Errore&lt;br/&gt;&lt;small&gt;anagrafica automatica (.codici)&lt;/small&gt;&quot;]
+        C4[&quot;📊 Report Data Quality&lt;br/&gt;&lt;small&gt;statistiche validazione (.stats)&lt;/small&gt;&quot;]
+        C5[&quot;📝 Log di Processo&lt;br/&gt;&lt;small&gt;dettaglio esecuzione&lt;/small&gt;&quot;]
+    end
+
+    A1 --&gt; B
+    A2 --&gt; B
+    A3 --&gt; B
+    A4 --&gt; B
+
+    B --&gt; C1
+    B --&gt; C2
+    B --&gt; C3
+    B --&gt; C4
+    B --&gt; C5
+
+    style input fill:#e3f2fd,stroke:none
+    style framework fill:#fff3e0,stroke:none
+    style output fill:#e8f5e9,stroke:none
+</div>
+
+<p><strong><em>Figura 1 - Architettura ad alto livello del Data Quality Framework</em></strong></p>
+<p><strong>Legenda:</strong></p>
+<ul>
+<li>🔵 <strong>Input</strong> (azzurro): File necessari per l'elaborazione</li>
+<li>🟠 <strong>Elaborazione</strong> (arancione): Processo di validazione</li>
+<li>🟢 <strong>Output</strong> (verde): File generati automaticamente</li>
+</ul>
+<p>La Figura 1 illustra il funzionamento generale del framework: il sistema riceve quattro tipologie di file in ingresso (① file dati CSV o FIXED da validare, ② tracciato CSV che definisce la struttura e le regole di validazione degli attributi, ③ file di configurazione di processo contenente parametri tecnici globali, ④ file di configurazione di flusso con parametri specifici dell'elaborazione), elabora i dati attraverso il motore di validazione centrale (②), e produce cinque tipologie di output (③ file con record validi, ④ file con record scartati e motivazioni, ⑤ anagrafica codici errore rilevati, ⑥ report statistico di sintesi, ⑦ log dettagliato di processo).</p>
+<h3 id="12-dettaglio-funzionamento">1.2 Dettaglio funzionamento</h3>
+<p>Il processo di validazione opera con un meccanismo di <strong>elaborazione sequenziale record-by-record</strong>. Il file dati viene letto riga per riga mantenendo costante il consumo di memoria anche per file di grandi dimensioni. Per ciascuna riga estratta, il framework applica le regole di parsing definite nel <strong>file di configurazione del tracciato</strong>: nel caso di file CSV, gli attributi vengono separati in base al delimitatore configurato (tipicamente virgola, punto-virgola, pipe o tab, ma è possibile specificare qualsiasi carattere mediante il parametro di configurazione), mentre per i file a lunghezza fissa (FIXED), i valori vengono estratti mediante le coordinate di posizione (start/length) specificate nel layout. Una volta isolati i singoli attributi, il sistema esegue in sequenza tutti i controlli di Data Quality configurati per ciascun attributo secondo le regole dichiarate nel tracciato.</p>
+<p>Le righe che superano con successo l'intero ciclo di validazioni, senza rilevare alcuna violazione, confluiscono nel <strong>flusso di output delle righe valide</strong>. Al contrario, le righe in cui viene rilevata almeno una non conformità (campo obbligatorio assente, formato incompatibile con il pattern atteso, valore numerico fuori range, data invalida, codice non presente nel dominio ammesso) vengono indirizzate verso il <strong>flusso di scarto</strong>, arricchite con una colonna aggiuntiva contenente i codici errore specifici che identificano puntualmente le violazioni riscontrate.</p>
+<div class="mermaid">flowchart LR
+    A[&quot;📄 Riga&quot;] --&gt; B[&quot;🔍 Parsing&quot;]
+    B --&gt; C{Controlli&lt;br/&gt;DQ}
+    C --&gt;|OK| D[&quot;✔️ File OK&quot;]
+    C --&gt;|KO| E[&quot;❌ File KO&quot;]
+
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    style B fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style C fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style D fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style E fill:#ffebee,stroke:#c62828,stroke-width:2px
+</div>
+
+<p><strong><em>Figura 2 - Flusso elaborazione record-by-record</em></strong></p>
+<p>Al termine dell'elaborazione, il framework produce due dataset completamente distinti e mutuamente esclusivi: il primo contiene esclusivamente i record che hanno superato tutte le validazioni configurate; il secondo raccoglie le righe che non hanno superato i controlli di validazione configurati. Ogni esecuzione genera inoltre un report statistico dettagliato che documenta metriche aggregate di qualità, distribuzione degli errori per tipologia e per campo, percentuali di successo, fornendo agli operatori visibilità completa e quantificabile sull'esito del processo di validazione.</p>
+<p>Parallelamente ai file di output, il processo genera automaticamente un <strong>file di log</strong> strutturato che traccia l'intero ciclo di vita dell'elaborazione: caricamento delle configurazioni, controlli preliminari sui file di input, fasi di parsing e validazione con timestamp millisecondi, statistiche di processamento per ciascun file elaborato (numero record validi/scartati, tempo di elaborazione, throughput), eventuali errori di sistema o warning operativi. Il log costituisce uno strumento essenziale per l'auditing delle operazioni, il troubleshooting di anomalie e il monitoraggio delle performance del sistema.</p>
+<h3 id="13-pattern-matching-e-selezione-file">1.3 Pattern matching e selezione file</h3>
+<p>La soluzione è altamente configurabile per quanto riguarda la gestione dei file dati di input, permettendo di elaborare singoli file o insiemi di file con criteri di selezione e ordinamento personalizzati: quando viene applicato un pattern di ricerca (es. <code>vendite_*.csv</code>), è possibile elaborare tutti i file che corrispondono al pattern, oppure selezionare solo il primo o solo l'ultimo in base all'ordinamento configurato.</p>
+<p>Il framework supporta tre modalità di elaborazione quando vengono rilevati più file corrispondenti a un pattern:</p>
+<div class="mermaid">%%{init: {'theme':'base', 'themeVariables': {'fontSize':'14px'}}}%%
+flowchart TD
+    Start([📁 File presenti&lt;br/&gt;in Directory Input]) --&gt; Files[&quot;📄 vendite_20250108.csv&lt;br/&gt;📄 vendite_20250109.csv&lt;br/&gt;📄 vendite_20250110.csv&quot;]
+
+    Files --&gt; Pattern[🔍 Pattern Matching&lt;br/&gt;vendite_*.csv&lt;br/&gt;Ordinamento: alfabetico ASC]
+
+    Pattern --&gt; Strategy{⚙️ Strategia&lt;br/&gt;di Selezione?}
+
+    Strategy --&gt;|① Modalità 1| Mode1[✅ Solo primo file]
+    Strategy --&gt;|② Modalità 2| Mode2[✅ Solo ultimo file]
+    Strategy --&gt;|③ Modalità 3| Mode3[✅ Tutti i file]
+
+    Mode1 --&gt; Result1[📄 vendite_20250108.csv]
+    Mode2 --&gt; Result2[📄 vendite_20250110.csv]
+    Mode3 --&gt; Result3[📄 vendite_20250108.csv&lt;br/&gt;📄 vendite_20250109.csv&lt;br/&gt;📄 vendite_20250110.csv]
+
+    Result1 --&gt; End([🎯 File selezionato&lt;br/&gt;per elaborazione])
+    Result2 --&gt; End
+    Result3 --&gt; End
+
+    style Start fill:#e8f0f7,stroke:#5a7a9b,stroke-width:1.5px,color:#2c3e50
+    style Files fill:#f7f0e8,stroke:#9b7a5a,stroke-width:1.5px,color:#2c3e50
+    style Pattern fill:#f0e8f7,stroke:#7a5a9b,stroke-width:1.5px,color:#2c3e50
+    style Strategy fill:#f7f0e8,stroke:#9b7a5a,stroke-width:1.5px,color:#2c3e50
+    style Mode1 fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style Mode2 fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style Mode3 fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style Result1 fill:#ffffff,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style Result2 fill:#ffffff,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style Result3 fill:#ffffff,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style End fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+
+    linkStyle default stroke:#7f8c8d,stroke-width:1.5px
+</div>
+
+<p><strong><em>Figura 3 - Strategie di selezione file con pattern matching</em></strong></p>
+<hr />
+<h3 id="14-invocazione-ed-esecuzione">1.4 Invocazione ed Esecuzione</h3>
+<p>Il <strong><em>Data Quality Framework</em></strong> viene distribuito come <strong>eseguibile standalone</strong> per piattaforme <strong>Windows</strong> e <strong>Linux</strong>, non richiedendo installazione Python sul sistema target. L'esecuzione avviene da riga di comando con un parametro obbligatorio che identifica il flusso di validazione da elaborare.</p>
+<h4 id="141-sintassi-comando">1.4.1 Sintassi Comando</h4>
+<p>Il framework viene invocato da riga di comando con la seguente sintassi:</p>
+<p><strong>Windows:</strong></p>
+<pre class="codehilite"><code class="language-cmd">DataQualityFramework.exe &lt;nome_funzionale&gt;
+</code></pre>
+
+<p><strong>Linux:</strong></p>
+<pre class="codehilite"><code class="language-bash">./DataQualityFramework &lt;nome_funzionale&gt;
+</code></pre>
+
+<p><strong>Parametri:</strong></p>
+<ul>
+<li><strong>nome_funzionale</strong> (obbligatorio): Identificativo del flusso di validazione da elaborare. Deve corrispondere a una chiave configurata nel file di sistema <code>DataQualityFramework.cfg</code> nella sezione mapping dei flussi.</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>Nota</strong>: Il parametro è <strong>case-insensitive</strong> - viene automaticamente convertito in maiuscolo dal framework. I valori <code>dipendenti_csv</code>, <code>DIPENDENTI_CSV</code> e <code>Dipendenti_Csv</code> sono equivalenti.</p>
+</blockquote>
+<p><strong>Esempi di invocazione:</strong></p>
+<pre class="codehilite"><code class="language-bash"># Elaborazione flusso dipendenti in formato CSV (tutte equivalenti)
+DataQualityFramework.exe DIPENDENTI_CSV
+DataQualityFramework.exe dipendenti_csv
+DataQualityFramework.exe Dipendenti_Csv
+
+# Elaborazione anagrafica clienti
+DataQualityFramework.exe CLIENTI_ANAGRAFICA  
+
+# Elaborazione fornitori in formato FIXED
+DataQualityFramework.exe FORNITORI_FIXED
+</code></pre>
+
+<p><strong>Visualizzazione help:</strong></p>
+<pre class="codehilite"><code class="language-bash"># Help completo con sintassi ed esempi
+DataQualityFramework.exe --help
+</code></pre>
+
+<h4 id="142-gestione-errori-invocazione">1.4.2 Gestione Errori Invocazione</h4>
+<p>Il framework implementa controlli rigorosi durante la fase di invocazione per garantire che tutti i prerequisiti siano soddisfatti prima di avviare l'elaborazione.</p>
+<p><strong>Mancanza parametro obbligatorio:</strong></p>
+<p>Se l'utente omette il parametro <code>nome_funzionale</code>, il framework termina immediatamente con exit code 2 e visualizza un messaggio di errore seguito dall'help completo:</p>
+<pre class="codehilite"><code class="language-bash">$ DataQualityFramework.exe
+
+usage: DataQualityFramework.exe [-h] nome_funzionale
+DataQualityFramework.exe: error: the following arguments are required: nome_funzionale
+
+Data Quality Framework v1.0.0 - Sistema Enterprise per Validazione Dati
+
+Esempi di utilizzo:
+  DataQualityFramework.exe TEST_CSV_COMPARATIVO
+  DataQualityFramework.exe TEST_FIXED_COMPARATIVO
+  DataQualityFramework.exe PROD_ANAGRAFICA_CLIENTI
+</code></pre>
+
+<p><strong>Exit codes:</strong></p>
+<p>Il framework utilizza exit code standard POSIX per facilitare l'integrazione in pipeline automatizzate e sistemi di orchestrazione:</p>
+<table>
+<thead>
+<tr>
+<th>Exit Code</th>
+<th>Significato</th>
+<th>Descrizione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0</strong></td>
+<td>Successo</td>
+<td>Elaborazione completata con successo, tutti i file processati</td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td>Errore elaborazione</td>
+<td>Errore durante l'elaborazione dati (eccezioni non gestite)</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>Errore configurazione</td>
+<td>Configurazione mancante o non valida (mapping flusso, file .cfg, parametri obbligatori)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="143-risoluzione-configurazione-flusso">1.4.3 Risoluzione Configurazione Flusso</h4>
+<p>Una volta validato il parametro da riga di comando, il framework esegue una sequenza di controlli per risolvere la configurazione specifica del flusso richiesto.</p>
+<p><strong>Meccanismo di risoluzione:</strong></p>
+<ol>
+<li><strong>Caricamento configurazione sistema</strong></li>
+</ol>
+<p>Il framework legge il file <code>cfg/DataQualityFramework.cfg</code> che contiene:
+   - Parametri globali di sistema (PATH_LOG, LOG_LEVEL, ecc.)
+   - Mapping dei flussi disponibili (nome_funzionale → path configurazione flusso)</p>
+<ol>
+<li><strong>Ricerca mapping flusso</strong></li>
+</ol>
+<p>Cerca una chiave nel file di sistema corrispondente al <code>nome_funzionale</code> passato (case-insensitive). Il mapping definisce il path del file di configurazione specifico del flusso.</p>
+<p><strong>Esempio mapping nel file sistema:</strong>
+   ```ini
+   # File: cfg/DataQualityFramework.cfg</p>
+<p># Mapping flussi disponibili
+   DIPENDENTI_CSV=cfg/flows/dipendenti_csv.cfg
+   DIPENDENTI_FIXED=cfg/flows/dipendenti_fixed.cfg
+   CLIENTI_ANAGRAFICA=cfg/flows/clienti_anagrafica.cfg
+   ```</p>
+<ol>
+<li><strong>Verifica esistenza file configurazione flusso</strong></li>
+</ol>
+<p>Verifica che il file di configurazione flusso specificato nel mapping esista fisicamente sul filesystem.</p>
+<p><strong>Gestione errori di risoluzione:</strong></p>
+<p>Il framework implementa controlli CRITICAL con terminazione immediata in caso di problemi:</p>
+<p><strong>Errore 1: Mapping flusso non trovato</strong></p>
+<p>Se il <code>nome_funzionale</code> richiesto non è configurato nel file di sistema:</p>
+<pre class="codehilite"><code>[2025-11-12 14:30:15.234] - CRITICAL - ❌ Mapping flusso 'FLUSSO_INESISTENTE' NON trovato nel file di configurazione sistema
+[2025-11-12 14:30:15.235] - CRITICAL -    File configurazione: C:\Python\cfg\DataQualityFramework.cfg
+[2025-11-12 14:30:15.236] - CRITICAL -    Flussi disponibili nel file sistema:
+[2025-11-12 14:30:15.237] - CRITICAL -      • DIPENDENTI_CSV → cfg/flows/dipendenti_csv.cfg
+[2025-11-12 14:30:15.238] - CRITICAL -      • DIPENDENTI_FIXED → cfg/flows/dipendenti_fixed.cfg
+[2025-11-12 14:30:15.239] - CRITICAL -      • CLIENTI_ANAGRAFICA → cfg/flows/clienti_anagrafica.cfg
+[2025-11-12 14:30:15.240] - CRITICAL -    Fine processo con exit code 2
+</code></pre>
+
+<p><strong>Errore 2: File configurazione flusso non esiste</strong></p>
+<p>Se il path specificato nel mapping non corrisponde a un file esistente:</p>
+<pre class="codehilite"><code>[2025-11-12 14:32:10.456] - CRITICAL - ❌ File configurazione flusso NON esiste
+[2025-11-12 14:32:10.457] - CRITICAL -    Flusso richiesto: DIPENDENTI_CSV
+[2025-11-12 14:32:10.458] - CRITICAL -    Path atteso: C:\Python\cfg\flows\dipendenti_csv.cfg
+[2025-11-12 14:32:10.459] - CRITICAL -    Path nel mapping: cfg/flows/dipendenti_csv.cfg
+[2025-11-12 14:32:10.460] - CRITICAL -    Fine processo con exit code 2
+</code></pre>
+
+<p><strong>Vantaggi del meccanismo:</strong></p>
+<ul>
+<li><strong>Fail-fast</strong>: Errori di configurazione vengono rilevati immediatamente prima dell'elaborazione dati</li>
+<li><strong>Diagnostica dettagliata</strong>: Log CRITICAL fornisce tutte le informazioni necessarie per risolvere il problema</li>
+<li><strong>Lista flussi disponibili</strong>: In caso di errore, mostra automaticamente tutti i flussi configurati correttamente</li>
+<li><strong>Exit code standard</strong>: Permette l'integrazione in script di orchestrazione con gestione errori appropriata</li>
+<li><strong>Path assoluti nel log</strong>: Facilita la verifica manuale dell'esistenza dei file di configurazione</li>
+</ul>
+<h4 id="144-flusso-completo-di-avvio">1.4.4 Flusso Completo di Avvio</h4>
+<p>Il diagramma seguente illustra l'intero flusso di avvio del framework dalla riga di comando fino all'inizio dell'elaborazione dati:</p>
+<div class="mermaid">%%{init: {'theme':'base', 'themeVariables': {'fontSize':'14px'}}}%%
+flowchart TD
+    Start([👤 Utente esegue&lt;br/&gt;comando]) --&gt; Parse[🔍 Parsing argomenti&lt;br/&gt;riga comando]
+
+    Parse --&gt; CheckArg{Parametro&lt;br/&gt;nome_funzionale&lt;br/&gt;presente?}
+
+    CheckArg --&gt;|❌ No| ErrorArg[❌ ERRORE PARAMETRI&lt;br/&gt;Mostra usage + help&lt;br/&gt;Exit code 2]
+
+    CheckArg --&gt;|✅ Sì| LoadSys[📂 Carica config sistema&lt;br/&gt;DataQualityFramework.cfg]
+
+    LoadSys --&gt; CheckMap{Mapping flusso&lt;br/&gt;trovato in&lt;br/&gt;config sistema?}
+
+    CheckMap --&gt;|❌ No| ErrorMap[❌ ERRORE CRITICAL&lt;br/&gt;Elenca flussi disponibili&lt;br/&gt;Exit code 2]
+
+    CheckMap --&gt;|✅ Sì| CheckFile{File config&lt;br/&gt;flusso esiste&lt;br/&gt;su filesystem?}
+
+    CheckFile --&gt;|❌ No| ErrorFile[❌ ERRORE CRITICAL&lt;br/&gt;Mostra path atteso/mapping&lt;br/&gt;Exit code 2]
+
+    CheckFile --&gt;|✅ Sì| LoadFlow[📂 Carica config flusso&lt;br/&gt;Merge con config sistema]
+
+    LoadFlow --&gt; InitLog[📝 Inizializza logger&lt;br/&gt;con timestamp]
+
+    InitLog --&gt; PrintBanner[🎯 Stampa banner&lt;br/&gt;informativo processo]
+
+    PrintBanner --&gt; ValidateParams[✔️ Valida parametri&lt;br/&gt;obbligatori merged]
+
+    ValidateParams --&gt; StartProc[🚀 Avvio elaborazione&lt;br/&gt;dati validazione]
+
+    StartProc --&gt; Success([✅ Processo in esecuzione])
+
+    ErrorArg --&gt; End([🛑 Fine processo])
+    ErrorMap --&gt; End
+    ErrorFile --&gt; End
+
+    style Start fill:#e8f0f7,stroke:#5a7a9b,stroke-width:2px,color:#2c3e50
+    style Parse fill:#f7f0e8,stroke:#9b7a5a,stroke-width:1.5px,color:#2c3e50
+    style CheckArg fill:#fff3e8,stroke:#d9a066,stroke-width:1.5px,color:#2c3e50
+    style LoadSys fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style CheckMap fill:#fff3e8,stroke:#d9a066,stroke-width:1.5px,color:#2c3e50
+    style CheckFile fill:#fff3e8,stroke:#d9a066,stroke-width:1.5px,color:#2c3e50
+    style LoadFlow fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style InitLog fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style PrintBanner fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style ValidateParams fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style StartProc fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style Success fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#155724
+    style ErrorArg fill:#f8d7da,stroke:#dc3545,stroke-width:2px,color:#721c24
+    style ErrorMap fill:#f8d7da,stroke:#dc3545,stroke-width:2px,color:#721c24
+    style ErrorFile fill:#f8d7da,stroke:#dc3545,stroke-width:2px,color:#721c24
+    style End fill:#e2e3e5,stroke:#6c757d,stroke-width:2px,color:#383d41
+
+    linkStyle default stroke:#7f8c8d,stroke-width:1.5px
+</div>
+
+<p><strong><em>Figura 4 - Flusso completo di avvio e controlli preliminari</em></strong></p>
+<hr />
+<h2 id="2-configurazione-data-quality-framework_1">🗂️ 2. Configurazione <strong><em>Data Quality Framework</em></strong></h2>
+<p>Il <strong><em>Data Quality Framework</em></strong> adotta un approccio di configurazione <strong>dichiarativo</strong> basato su file esterni, eliminando la necessità di modificare il codice sorgente per adattare il comportamento del sistema alle specifiche esigenze di ogni flusso di validazione. La configurazione si articola su tre tipologie di file complementari, ciascuno con uno scopo specifico e ben definito nella gerarchia del sistema.</p>
+<p>Il framework riconosce e gestisce <strong>tre livelli di configurazione</strong>:</p>
+<ol>
+<li>
+<p><strong>Configurazione di Sistema</strong> (<code>DataQualityFramework.cfg</code>) - Parametri globali che si applicano a tutti i flussi, inclusa la directory dei log, il livello di logging generale e il mapping che associa ogni identificativo di flusso al relativo file di configurazione specifica.</p>
+</li>
+<li>
+<p><strong>Configurazione di Flusso</strong> (es. <code>dipendenti_csv.cfg</code>) - Parametri specifici per un singolo flusso di validazione, quali i percorsi dei file di input/output, le impostazioni di parsing CSV o FIXED, e le opzioni di elaborazione batch. Quando un parametro è definito sia nel file di sistema che nel file di flusso, <strong>il valore del flusso ha priorità assoluta</strong>, consentendo personalizzazioni granulari senza impattare altri flussi.</p>
+</li>
+<li>
+<p><strong>Tracciato di Validazione</strong> (es. <code>layout_dipendenti.csv</code>) - Definizione strutturata degli attributi del dataset e delle regole di validazione da applicare a ciascun campo, espressa in formato tabellare CSV per massima leggibilità e manutenibilità.</p>
+</li>
+</ol>
+<p>Questa architettura a tre livelli garantisce <strong>separazione delle responsabilità</strong>, <strong>riutilizzabilità delle configurazioni</strong> e <strong>flessibilità nella gestione di scenari eterogenei</strong>, permettendo di mantenere parametri comuni centralizzati mentre ogni flusso preserva le proprie specificità operative.</p>
+<hr />
+<h3 id="21-file-di-configurazione-sistema-e-flusso-cfg">2.1 File di Configurazione Sistema e Flusso (.cfg)</h3>
+<p>I file di configurazione utilizzano il formato <strong>INI</strong> standard, caratterizzato da coppie chiave-valore organizzate in sezioni opzionali. Due file distinti condividono questa struttura ma servono scopi complementari:</p>
+<ul>
+<li>
+<p><strong>File di Sistema</strong> (<code>DataQualityFramework.cfg</code>): Contiene parametri globali validi per tutte le esecuzioni del framework, quali la directory base dei log, il livello di logging predefinito, e soprattutto il <strong>mapping dei flussi</strong> che associa ogni identificativo funzionale (es. <code>DIPENDENTI_CSV</code>) al percorso assoluto del rispettivo file di configurazione specifica.</p>
+</li>
+<li>
+<p><strong>File di Flusso</strong> (es. <code>dipendenti_csv.cfg</code>): Definisce parametri operativi specifici per un singolo flusso di validazione, inclusi i percorsi dei file di input/output, le impostazioni di parsing formato-specifiche (CSV vs FIXED), i parametri di pattern matching per elaborazioni batch, e il riferimento al tracciato di validazione da applicare.</p>
+</li>
+</ul>
+<h4 id="211-gerarchia-e-risoluzione-parametri">2.1.1 Gerarchia e Risoluzione Parametri</h4>
+<p>Il framework implementa un <strong>meccanismo di risoluzione gerarchica a tre livelli</strong> per determinare il valore effettivo di ogni parametro:</p>
+<p><strong>Priorità 1 - FLUSSO (🥇 Massima):</strong> Se il parametro è definito nel file di configurazione specifico del flusso, questo valore viene utilizzato <strong>incondizionatamente</strong>, ignorando eventuali definizioni nei livelli inferiori.</p>
+<p><strong>Priorità 2 - SISTEMA (🥈 Media):</strong> Se il parametro non è presente nel file di flusso ma è definito nel file di sistema <code>DataQualityFramework.cfg</code>, viene utilizzato il valore del file di sistema. Questo permette di definire <strong>default condivisi</strong> tra più flussi.</p>
+<p><strong>Priorità 3 - DEFAULT (🥉 Bassa):</strong> Se il parametro non è specificato né nel flusso né nel sistema, il framework utilizza un valore predefinito <strong>hardcoded</strong> nel codice sorgente, garantendo robustezza anche in assenza di configurazione esplicita.</p>
+<p><strong>Errore CRITICAL:</strong> Per parametri obbligatori privi di default (es. <code>DQ_FILE_TRACCIATO</code>, <code>DQ_FILE_TO_WORK</code>), se non sono definiti in alcuno dei tre livelli, il framework termina immediatamente con <strong>exit code 2</strong> e un messaggio di log CRITICAL che elenca i parametri mancanti.</p>
+<p><strong>Diagramma flusso decisionale:</strong></p>
+<div class="mermaid">%%{init: {'theme':'base', 'themeVariables': {'fontSize':'14px'}, 'flowchart': {'htmlLabels': true, 'curve': 'linear'}}}%%
+flowchart TD
+    Start([🔧 Framework cerca&lt;br/&gt;parametro X]) --&gt; CheckFlusso{Parametro X&lt;br/&gt;presente in&lt;br/&gt;File FLUSSO?}
+
+    CheckFlusso -- ✅ Sì --&gt; UsaFlusso[✅ USA VALORE FLUSSO&lt;br/&gt;Priorità: 🥇 MASSIMA]
+    CheckFlusso -- ❌ No --&gt; CheckProcesso{Parametro X&lt;br/&gt;presente in&lt;br/&gt;File PROCESSO?}
+
+    CheckProcesso -- ✅ Sì --&gt; UsaProcesso[⚙️ USA VALORE PROCESSO&lt;br/&gt;Priorità: 🥈 MEDIA]
+    CheckProcesso -- ❌ No --&gt; CheckDefault{Parametro X&lt;br/&gt;ha valore&lt;br/&gt;DEFAULT&lt;br/&gt;nel codice?}
+
+    CheckDefault -- ✅ Sì --&gt; UsaDefault[🔹 USA VALORE DEFAULT&lt;br/&gt;Priorità: 🥉 BASSA]
+    CheckDefault -- ❌ No --&gt; Errore[❌ ERRORE CRITICAL&lt;br/&gt;Parametro obbligatorio&lt;br/&gt;mancante&lt;br/&gt;Exit code 2]
+
+    UsaFlusso --&gt; Fine([🎯 Valore finale&lt;br/&gt;determinato])
+    UsaProcesso --&gt; Fine
+    UsaDefault --&gt; Fine
+
+    Errore --&gt; Stop([🛑 STOP&lt;br/&gt;Processo terminato])
+
+    style Start fill:#e8f0f7,stroke:#5a7a9b,stroke-width:1.5px,color:#2c3e50
+    style CheckFlusso fill:#f7f0e8,stroke:#9b7a5a,stroke-width:1.5px,color:#2c3e50
+    style CheckProcesso fill:#f7f0e8,stroke:#9b7a5a,stroke-width:1.5px,color:#2c3e50
+    style CheckDefault fill:#f7f0e8,stroke:#9b7a5a,stroke-width:1.5px,color:#2c3e50
+    style UsaFlusso fill:#e8f7f0,stroke:#5a9b7a,stroke-width:2px,color:#2c3e50
+    style UsaProcesso fill:#f7f5e8,stroke:#9b8f5a,stroke-width:1.5px,color:#2c3e50
+    style UsaDefault fill:#e8f0f7,stroke:#5a7a9b,stroke-width:1.5px,color:#2c3e50
+    style Errore fill:#f7e8e8,stroke:#9b5a5a,stroke-width:2px,color:#2c3e50
+    style Fine fill:#e8f7f0,stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    style Stop fill:#f7e8e8,stroke:#9b5a5a,stroke-width:1.5px,color:#2c3e50
+
+    linkStyle 0 stroke:#7f8c8d,stroke-width:1.5px
+    linkStyle 1 stroke:#5a9b7a,stroke-width:1.5px,color:#2c3e50
+    linkStyle 2 stroke:#9b7a5a,stroke-width:1.5px,color:#2c3e50
+    linkStyle 3 stroke:#9b8f5a,stroke-width:1.5px,color:#2c3e50
+    linkStyle 4 stroke:#9b7a5a,stroke-width:1.5px,color:#2c3e50
+    linkStyle 5 stroke:#5a7a9b,stroke-width:1.5px,color:#2c3e50
+    linkStyle 6 stroke:#9b5a5a,stroke-width:1.5px,color:#2c3e50
+    linkStyle 7 stroke:#5a9b7a,stroke-width:1.5px
+    linkStyle 8 stroke:#5a9b7a,stroke-width:1.5px
+    linkStyle 9 stroke:#5a9b7a,stroke-width:1.5px
+    linkStyle 10 stroke:#9b5a5a,stroke-width:1.5px
+</div>
+
+<p><strong><em>Figura 4 - Logica di risoluzione priorità parametri</em></strong></p>
+<hr />
+<p><strong>Legenda priorità:</strong></p>
+<ul>
+<li>
+<p>🥇 <strong>PRIORITÀ 1 - FLUSSO</strong>: Verde scuro<br />
+  Valore specifico per quel CSV. Se presente, <strong>sovrascrive tutto</strong> (PROCESSO e DEFAULT ignorati).</p>
+</li>
+<li>
+<p>🥈 <strong>PRIORITÀ 2 - PROCESSO</strong>: Giallo<br />
+  Valore globale per tutti i CSV. Usato solo se <strong>assente nel FLUSSO</strong>.</p>
+</li>
+<li>
+<p>🥉 <strong>PRIORITÀ 3 - DEFAULT</strong>: Giallo chiaro<br />
+  Valore predefinito sicuro hardcoded nel codice. Usato solo se <strong>assente in FLUSSO e PROCESSO</strong>.</p>
+</li>
+<li>
+<p>🚫 <strong>ERRORE</strong>: Rosso<br />
+  Solo per parametri obbligatori (<code>DQ_FILE_TO_CHECK</code> o <code>DQ_FILE_TO_WORK</code>, <code>DQ_FILE_TRACCIATO</code>). Se mancano <strong>in tutti e 3 i livelli</strong>, il framework si ferma con exit code 2.</p>
+</li>
+</ul>
+<hr />
+<h4 id="212-parametri-di-configurazione">2.1.2 Parametri di Configurazione</h4>
+<p>Le tabelle seguenti documentano tutti i parametri supportati dal framework, organizzati per categoria funzionale. Ogni parametro è descritto con obbligatorietà, valori di default, sensibilità al case e esempi pratici di utilizzo.</p>
+<blockquote>
+<p>⚠️ <strong>IMPORTANTE - Percorsi Assoluti</strong>: Tutti i percorsi specificati nei file di configurazione devono essere <strong>assoluti</strong> per garantire portabilità e prevenire ambiguità durante l'esecuzione. Evitare percorsi relativi che potrebbero essere interpretati diversamente in base alla directory corrente di esecuzione.</p>
+</blockquote>
+<h5 id="parametri-directory-e-percorsi"><strong>📂 Parametri Directory e Percorsi</strong></h5>
+<table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Obbl.</th>
+<th>Contesto Obbligatorietà</th>
+<th>Default</th>
+<th>Case Sensitive</th>
+<th>Descrizione ed Esempio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PATH_LOG</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>log/</code></td>
+<td>✅ Sì (path)</td>
+<td>Directory base contenente i file di log del framework. Ogni esecuzione genera un file log timestampato in questa directory.<br><strong>Esempio:</strong> <code>PATH_LOG=C:\DataQuality\logs\</code><br><strong>Nota:</strong> Usare sempre path assoluto</td>
+</tr>
+<tr>
+<td><code>DQ_DIR_TO_SCAN</code></td>
+<td>⚠️ Cond</td>
+<td>✅ Obbligatorio per elaborazione batch con pattern matching</td>
+<td>-</td>
+<td>✅ Sì (path)</td>
+<td>Directory da scansionare per individuare file matching il pattern <code>DQ_FILE_TO_WORK</code><br><strong>Esempio:</strong> <code>DQ_DIR_TO_SCAN=C:\DataQuality\input\pending\</code><br><strong>Usato con:</strong> <code>DQ_FILE_TO_WORK=dipendenti_*.csv</code></td>
+</tr>
+<tr>
+<td><code>DQ_FILE_TO_WORK</code></td>
+<td>⚠️ Cond</td>
+<td>✅ Obbligatorio se formato=CSV o FIXED</td>
+<td>-</td>
+<td>✅ Sì</td>
+<td>File singolo o pattern glob per elaborazione batch<br><strong>File singolo:</strong> <code>DQ_FILE_TO_WORK=C:\DataQuality\input\dipendenti_20251112.csv</code><br><strong>Pattern:</strong> <code>DQ_FILE_TO_WORK=dipendenti_*.csv</code> (richiede <code>DQ_DIR_TO_SCAN</code>)</td>
+</tr>
+<tr>
+<td><code>DQ_FILE_TRACCIATO</code></td>
+<td>✅ Sì</td>
+<td>Sempre obbligatorio</td>
+<td>-</td>
+<td>✅ Sì (path)</td>
+<td>Path assoluto del file tracciato CSV contenente definizione struttura e regole validazione<br><strong>Esempio:</strong> <code>DQ_FILE_TRACCIATO=C:\DataQuality\cfg\layouts\layout_dipendenti.csv</code></td>
+</tr>
+<tr>
+<td><code>OUTPUT_DIR_VALID</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>output/success/</code></td>
+<td>✅ Sì (path)</td>
+<td>Directory di destinazione per file validati (.ok)<br><strong>Esempio:</strong> <code>OUTPUT_DIR_VALID=C:\DataQuality\output\validated\</code></td>
+</tr>
+<tr>
+<td><code>OUTPUT_DIR_ERROR</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>output/error/</code></td>
+<td>✅ Sì (path)</td>
+<td>Directory di destinazione per file scartati (.ko)<br><strong>Esempio:</strong> <code>OUTPUT_DIR_ERROR=C:\DataQuality\output\rejected\</code></td>
+</tr>
+<tr>
+<td><code>OUTPUT_DIR_REPORTS</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>output/report/</code></td>
+<td>✅ Sì (path)</td>
+<td>Directory di destinazione per anagrafica codici errore (.codici)<br><strong>Esempio:</strong> <code>OUTPUT_DIR_REPORTS=C:\DataQuality\output\reports\</code></td>
+</tr>
+<tr>
+<td><code>OUTPUT_DIR_STATS</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>output/statistics/</code></td>
+<td>✅ Sì (path)</td>
+<td>Directory di destinazione per report statistiche (.stats)<br><strong>Esempio:</strong> <code>OUTPUT_DIR_STATS=C:\DataQuality\output\statistics\</code></td>
+</tr>
+</tbody>
+</table>
+<h5 id="parametri-logging-e-debug"><strong>🔧 Parametri Logging e Debug</strong></h5>
+<table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Obbl.</th>
+<th>Contesto Obbligatorietà</th>
+<th>Default</th>
+<th>Case Sensitive</th>
+<th>Descrizione ed Esempio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LOG_LEVEL</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>INFO</code></td>
+<td>❌ No</td>
+<td>Livello di dettaglio log. Valori: <code>DEBUG</code>, <code>DEBUG1</code>, <code>DEBUG2</code>, <code>DEBUG3</code>, <code>INFO</code>, <code>WARNING</code>, <code>ERROR</code>, <code>CRITICAL</code><br><strong>Esempio:</strong> <code>LOG_LEVEL=DEBUG3</code> (massimo dettaglio per troubleshooting)<br><strong>Nota:</strong> <code>debug</code>, <code>DEBUG</code>, <code>Debug</code> sono equivalenti</td>
+</tr>
+<tr>
+<td><code>DQ_ENABLE_FIELD_LOGGING</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>false</code></td>
+<td>❌ No</td>
+<td>Abilita logging valore campo per campo durante validazione (impatto performance significativo)<br><strong>Valori:</strong> <code>true/false</code>, <code>yes/no</code>, <code>s/n</code>, <code>y/n</code> (case-insensitive)<br><strong>Esempio:</strong> <code>DQ_ENABLE_FIELD_LOGGING=true</code></td>
+</tr>
+<tr>
+<td><code>DQ_ENABLE_ROW_LOGGING</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>false</code></td>
+<td>❌ No</td>
+<td>Abilita logging riga completa durante elaborazione<br><strong>Valori:</strong> <code>true/false</code>, <code>yes/no</code>, <code>s/n</code>, <code>y/n</code> (case-insensitive)<br><strong>Esempio:</strong> <code>DQ_ENABLE_ROW_LOGGING=yes</code></td>
+</tr>
+</tbody>
+</table>
+<h5 id="parametri-csv"><strong>📊 Parametri CSV</strong></h5>
+<table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Obbl.</th>
+<th>Contesto Obbligatorietà</th>
+<th>Default</th>
+<th>Case Sensitive</th>
+<th>Descrizione ed Esempio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FILE_ENCODING</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>utf-8</code></td>
+<td>❌ No</td>
+<td>Encoding file CSV/FIXED. Valori comuni: <code>utf-8</code>, <code>latin1</code>, <code>cp1252</code>, <code>iso-8859-1</code><br><strong>Esempio:</strong> <code>FILE_ENCODING=cp1252</code> (file Windows legacy)<br><strong>Nota:</strong> <code>UTF-8</code>, <code>utf-8</code>, <code>Utf-8</code> equivalenti</td>
+</tr>
+<tr>
+<td><code>CSV_FIELD_SEPARATOR</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>,</code></td>
+<td>✅ Sì</td>
+<td>Delimitatore campi CSV (separa colonne tra loro)<br><strong>Esempio:</strong> <code>CSV_FIELD_SEPARATOR=;</code> (punto e virgola)<br><strong>Nota:</strong> <code>,</code> (virgola) ≠ <code>;</code> (punto e virgola) - case sensitive</td>
+</tr>
+<tr>
+<td><code>CSV_TEXT_QUALIFIER</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>"</code></td>
+<td>✅ Sì</td>
+<td>Carattere qualificatore testo per valori contenenti il separatore<br><strong>Esempio:</strong> <code>CSV_TEXT_QUALIFIER='</code> (apice singolo invece di doppio apice)<br><strong>Nota:</strong> <code>"</code> (doppio apice) ≠ <code>'</code> (apice singolo)</td>
+</tr>
+<tr>
+<td><code>CSV_SKIP_HEADER_ROWS</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>1</code></td>
+<td>N/A (numerico)</td>
+<td>Numero righe header da saltare prima dei dati<br><strong>Esempio:</strong> <code>CSV_SKIP_HEADER_ROWS=2</code> (header + riga vuota separatrice)</td>
+</tr>
+<tr>
+<td><code>ERROR_CODES_SEPARATOR</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>\|</code></td>
+<td>✅ Sì</td>
+<td>Separatore tra codici errore nella colonna <code>DQ_ERROR_CODES</code> del file di scarto<br><strong>IMPORTANTE:</strong> Deve essere <strong>diverso</strong> da <code>CSV_FIELD_SEPARATOR</code> per evitare collisioni<br><strong>Esempio:</strong> <code>ERROR_CODES_SEPARATOR=~</code> (tilde)<br><strong>Raccomandato:</strong> <code>\|</code> (pipe), <code>;</code>, <code>~</code> se CSV_FIELD_SEPARATOR è virgola</td>
+</tr>
+</tbody>
+</table>
+<h5 id="parametri-fixed-fixed-width"><strong>📏 Parametri FIXED (Fixed-Width)</strong></h5>
+<table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Obbl.</th>
+<th>Contesto Obbligatorietà</th>
+<th>Default</th>
+<th>Case Sensitive</th>
+<th>Descrizione ed Esempio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FILE_FORMAT</code></td>
+<td>❌ No</td>
+<td>-</td>
+<td><code>CSV</code></td>
+<td>❌ No</td>
+<td>Formato file input: <code>CSV</code> (delimitato) o <code>FIXED</code> (fixed-width posizionale)<br><strong>Esempio:</strong> <code>FILE_FORMAT=FIXED</code> per file mainframe posizionali<br><strong>Nota:</strong> <code>fixed</code>, <code>FIXED</code>, <code>Fixed</code> equivalenti</td>
+</tr>
+</tbody>
+</table>
+<h5 id="parametri-pattern-matching-e-elaborazione-batch"><strong>⚙️ Parametri Pattern Matching e Elaborazione Batch</strong></h5>
+<table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Obbl.</th>
+<th>Contesto Obbligatorietà</th>
+<th>Default</th>
+<th>Case Sensitive</th>
+<th>Descrizione ed Esempio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PROCESS_WHICH</code></td>
+<td>❌ No</td>
+<td>⚠️ Rilevante solo in modalità batch con pattern matching</td>
+<td><code>all</code></td>
+<td>❌ No</td>
+<td>Strategia selezione file quando pattern match multipli: <code>all</code> (tutti), <code>first</code> (primo), <code>last</code> (ultimo)<br><strong>Esempio:</strong> <code>PROCESS_WHICH=first</code> (elabora solo file più recente)<br><strong>Combinato con:</strong> <code>SORT_KEYS</code> per ordinamento</td>
+</tr>
+<tr>
+<td><code>SORT_KEYS</code></td>
+<td>❌ No</td>
+<td>⚠️ Rilevante solo se <code>PROCESS_WHICH</code> ≠ <code>all</code></td>
+<td>-</td>
+<td>✅ Sì (sintassi)</td>
+<td>Definizione chiavi ordinamento per selezione file in modalità batch<br><strong>Sintassi:</strong> <code>nome[start:length:tipo:direzione]</code><br><strong>Esempio:</strong> <code>SORT_KEYS=nome[17:8:numero:desc]</code> (ordina per YYYYMMDD decrescente in posizione 17)<br><strong>Tipi:</strong> <code>numero</code>, <code>stringa</code><br><strong>Direzione:</strong> <code>asc</code>, <code>desc</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="validazione-e-conformita-configurazione"><strong>🔍 Validazione e Conformità Configurazione</strong></h5>
+<p>Durante la fase di inizializzazione, il framework esegue un <strong>controllo rigoroso di conformità</strong> dei file di configurazione prima di avviare qualsiasi elaborazione dati. Questo processo di validazione preliminare garantisce l'integrità e la coerenza della configurazione complessiva.</p>
+<p>Il framework carica sequenzialmente il file di sistema <code>DataQualityFramework.cfg</code> e il file di flusso specifico richiesto, quindi procede alla <strong>sovrapposizione gerarchica</strong> dei parametri secondo le priorità documentate (FLUSSO &gt; SISTEMA &gt; DEFAULT). Durante questa fase, vengono eseguiti i seguenti controlli:</p>
+<ul>
+<li>
+<p><strong>Verifica parametri obbligatori</strong>: Il framework controlla che tutti i parametri contrassegnati come obbligatori (es. <code>DQ_FILE_TRACCIATO</code>, <code>DQ_FILE_TO_WORK</code>) siano presenti in almeno uno dei tre livelli della gerarchia. L'assenza di un parametro obbligatorio causa la terminazione immediata del processo.</p>
+</li>
+<li>
+<p><strong>Validazione valori ammessi</strong>: Per parametri con dominio ristretto (es. <code>LOG_LEVEL</code>, <code>FILE_FORMAT</code>, <code>PROCESS_WHICH</code>), il framework verifica che il valore specificato rientri tra quelli ammessi. Valori non riconosciuti generano un errore di configurazione.</p>
+</li>
+<li>
+<p><strong>Verifica esistenza percorsi</strong>: Tutti i percorsi assoluti specificati vengono validati per esistenza fisica sul filesystem. Directory o file non accessibili causano errore CRITICAL con indicazione del path problematico.</p>
+</li>
+<li>
+<p><strong>Controllo coerenza parametri interdipendenti</strong>: Il framework verifica la coerenza logica tra parametri correlati (es. <code>PROCESS_WHICH=first</code> richiede <code>SORT_KEYS</code>, <code>FILE_FORMAT=FIXED</code> richiede tracciato con colonne <code>Posizione</code>/<code>Lunghezza</code>).</p>
+</li>
+</ul>
+<p><strong>In caso di non conformità</strong>, il framework interrompe l'esecuzione con <strong>exit code 2</strong> (errore di configurazione) e genera un messaggio di log CRITICAL dettagliato che indica:</p>
+<ol>
+<li><strong>Parametro problematico</strong> - Nome esatto del parametro che ha causato l'errore</li>
+<li><strong>Tipo di violazione</strong> - Parametro obbligatorio mancante, valore non ammesso, path inesistente, incoerenza logica</li>
+<li><strong>Valore fornito</strong> - Il valore specificato dall'utente (se presente)</li>
+<li><strong>Valori attesi o suggerimenti</strong> - Elenco valori ammessi o indicazioni per correggere l'errore</li>
+<li><strong>File sorgente</strong> - Quale file di configurazione contiene il parametro problematico</li>
+</ol>
+<p>Questo approccio <strong>fail-fast</strong> previene elaborazioni parziali o inconsistenti, garantendo che ogni esecuzione operi su una configurazione completamente validata e coerente.</p>
+<hr />
+<h4 id="213-mapping-flussi-nel-file-di-sistema">2.1.3 Mapping Flussi nel File di Sistema</h4>
+<p>Il file <code>DataQualityFramework.cfg</code> include una sezione dedicata al <strong>mapping dei flussi</strong>, che associa ogni identificativo funzionale al percorso assoluto del rispettivo file di configurazione specifica.</p>
+<p><strong>Esempio sezione mapping:</strong></p>
+<pre class="codehilite"><code class="language-ini"># ═══════════════════════════════════════════════════════════════════════════════
+# MAPPING FLUSSI - Data Quality Framework
+# ═══════════════════════════════════════════════════════════════════════════════
+
+DIPENDENTI_CSV=C:\DataQuality\cfg\flows\dipendenti_csv.cfg
+CLIENTI_ANAGRAFICA=C:\DataQuality\cfg\flows\clienti_anagrafica.cfg
+FORNITORI_FIXED=C:\DataQuality\cfg\flows\fornitori_fixed.cfg
+FATTURE_PASSIVE=C:\DataQuality\cfg\flows\fatture_passive.cfg
+</code></pre>
+
+<p><strong>Invocazione:</strong></p>
+<pre class="codehilite"><code class="language-bash">DataQualityFramework.exe DIPENDENTI_CSV
+</code></pre>
+
+<p>Il framework:
+1. Carica <code>DataQualityFramework.cfg</code>
+2. Converte <code>DIPENDENTI_CSV</code> in maiuscolo (case-insensitive)
+3. Cerca il mapping <code>DIPENDENTI_CSV</code> → <code>C:\DataQuality\cfg\flows\dipendenti_csv.cfg</code>
+4. Se trovato, carica il file specifico e procede con merge parametri
+5. Se non trovato, termina con CRITICAL listando tutti i flussi disponibili</p>
+<p><strong>Aggiungere un nuovo flusso:</strong>
+1. Creare file di configurazione flusso (es. <code>nuovo_flusso.cfg</code>) con parametri specifici
+2. Aggiungere riga nel mapping: <code>NUOVO_FLUSSO=C:\DataQuality\cfg\flows\nuovo_flusso.cfg</code>
+3. Invocare: <code>DataQualityFramework.exe NUOVO_FLUSSO</code></p>
+<hr />
+<h3 id="22-file-di-tracciato-csv">2.2 File di Tracciato (.csv)</h3>
+<p>Il <strong>file di tracciato</strong> (layout) è il cuore del sistema di validazione: definisce la struttura attesa dei file in input, le regole di controllo qualità per ogni campo e la codifica degli errori. Si tratta di un file <strong>CSV con header</strong> contenente una riga per ogni attributo da validare.</p>
+<p>Il framework supporta due formati di file input:
+- <strong>CSV (delimitato)</strong>: campi separati da delimitatore (<code>CSV_FIELD_SEPARATOR</code>)
+- <strong>FIXED (fixed-width)</strong>: campi posizionali a lunghezza fissa</p>
+<p>Entrambi i formati utilizzano <strong>lo stesso formato di tracciato CSV</strong>, ma con colonne diverse valorizzate:
+- <strong>CSV</strong>: colonna <code>TipoDato</code> obbligatoria, <code>start</code> e <code>length</code> vuote
+- <strong>FIXED</strong>: colonne <code>start</code> e <code>length</code> obbligatorie per definire posizione byte e lunghezza campo</p>
+<h4 id="221-struttura-file-tracciato">2.2.1 Struttura File Tracciato</h4>
+<p>Il file tracciato è un CSV con <strong>23 colonne</strong> che descrivono completamente ogni attributo da validare. Di seguito la tabella completa delle colonne con obbligatorietà e utilizzo.</p>
+<table>
+<thead>
+<tr>
+<th>Colonna</th>
+<th>Obbl.</th>
+<th>Formato</th>
+<th>Case Sensitive</th>
+<th>Descrizione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Indice</code></td>
+<td>✅ Sì</td>
+<td>Intero progressivo (0-based)</td>
+<td>N/A</td>
+<td>Posizione ordinale dell'attributo nel tracciato. Usato per ordinamento e referenziazione</td>
+</tr>
+<tr>
+<td><code>NomeAttributo</code></td>
+<td>✅ Sì</td>
+<td>Stringa (no spazi, no caratteri speciali)</td>
+<td>✅ Sì</td>
+<td>Nome identificativo univoco dell'attributo. Usato in log e report. <strong>Es:</strong> <code>NumeroTest</code>, <code>CodiceDipendente</code>, <code>Email</code></td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td>⚠️ Cond</td>
+<td>Intero (posizione 0-based)</td>
+<td>N/A</td>
+<td><strong>FIXED only</strong>: byte di inizio campo nel record fixed-width. <strong>Es:</strong> <code>0</code> (primo carattere), <code>25</code> (carattere 26°)</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>⚠️ Cond</td>
+<td>Intero positivo</td>
+<td>N/A</td>
+<td><strong>FIXED only</strong>: lunghezza in byte del campo. <strong>Es:</strong> <code>8</code>, <code>20</code>, <code>5</code></td>
+</tr>
+<tr>
+<td><code>TipoDato</code></td>
+<td>⚠️ Cond</td>
+<td><code>stringa</code>, <code>int</code>, <code>float</code>, <code>date</code></td>
+<td>❌ No</td>
+<td><strong>CSV only</strong>: tipo dato atteso. Obbligatorio per CSV, opzionale per FIXED (derivato da Formato). <strong>Valori:</strong> <code>stringa</code>, <code>int</code>, <code>float</code>, <code>date</code> (case-insensitive)</td>
+</tr>
+<tr>
+<td><code>ValoriAmmessi</code></td>
+<td>❌ No</td>
+<td>Valori separati da <code>\|</code></td>
+<td>✅ Sì (default)</td>
+<td>Dominio valori ammessi (enum). <strong>Es:</strong> <code>IT\|HR\|Sales\|Finance\|Operations</code>, <code>SI\|NO</code>, <code>M\|F</code>. <strong>Nota:</strong> Se colonna <code>CaseSensitive=false</code>, matching case-insensitive</td>
+</tr>
+<tr>
+<td><code>Minimo</code></td>
+<td>❌ No</td>
+<td>Numero (int/float)</td>
+<td>N/A</td>
+<td>Valore minimo ammesso per campi numerici. <strong>Es:</strong> <code>1500.00</code>, <code>0</code>, <code>18</code> (età minima)</td>
+</tr>
+<tr>
+<td><code>Massimo</code></td>
+<td>❌ No</td>
+<td>Numero (int/float)</td>
+<td>N/A</td>
+<td>Valore massimo ammesso per campi numerici. <strong>Es:</strong> <code>150000.00</code>, <code>999999</code>, <code>120</code> (età massima)</td>
+</tr>
+<tr>
+<td><code>Lunghezza</code></td>
+<td>❌ No</td>
+<td><code>=N</code>, <code>min-max</code>, <code>&lt;N</code>, <code>&gt;N</code></td>
+<td>N/A</td>
+<td>Vincolo lunghezza stringa. <strong>Esempi:</strong><br><code>=8</code> (esattamente 8 caratteri)<br><code>2-20</code> (tra 2 e 20 caratteri)<br><code>&lt;100</code> (meno di 100)<br><code>&gt;5</code> (più di 5)</td>
+</tr>
+<tr>
+<td><code>Obbligatorio</code></td>
+<td>✅ Sì</td>
+<td><code>true/false</code></td>
+<td>❌ No</td>
+<td>Campo obbligatorio (non null/vuoto). <strong>Valori:</strong> <code>true</code>, <code>false</code> (case-insensitive)</td>
+</tr>
+<tr>
+<td><code>Formato</code></td>
+<td>❌ No</td>
+<td>Pattern tipo-specifico</td>
+<td>Varia</td>
+<td>Formato atteso del valore:<br><strong>Date:</strong> <code>%d/%m/%Y</code>, <code>%Y-%m-%d</code>, <code>%d-%b-%Y</code><br><strong>Altri:</strong> libero (es. <code>XXX-NNNN</code>, <code>+39-NNN-NNNNNNN</code>)</td>
+</tr>
+<tr>
+<td><code>FunzioneCustom</code></td>
+<td>❌ No</td>
+<td>Nome funzione Python</td>
+<td>✅ Sì</td>
+<td>Nome funzione custom di validazione. Deve esistere in modulo framework. <strong>Es:</strong> <code>is_email_valid</code>, <code>is_cf_valid</code>, <code>is_iban_valid</code></td>
+</tr>
+<tr>
+<td><code>Regex</code></td>
+<td>❌ No</td>
+<td>Espressione regolare</td>
+<td>✅ Sì</td>
+<td>Pattern regex per validazione formato. <strong>Es:</strong> <code>^DIP[0-9]{5}$</code>, <code>^[0-9]{5}$</code>, <code>^[A-Z]{3}[0-9]{4}$</code></td>
+</tr>
+<tr>
+<td><code>CaseSensitive</code></td>
+<td>❌ No</td>
+<td><code>true/false</code></td>
+<td>❌ No</td>
+<td>Se <code>true</code>, matching <code>ValoriAmmessi</code> e regex case-sensitive. Se <code>false</code>, case-insensitive. <strong>Default:</strong> <code>true</code></td>
+</tr>
+<tr>
+<td><code>CodiceErrore</code></td>
+<td>❌ No</td>
+<td>Stringa alfanumerica</td>
+<td>✅ Sì</td>
+<td>Codice errore generico associato al campo. <strong>Es:</strong> <code>E00001</code>, <code>ERR_NOME</code>, <code>VAL001</code></td>
+</tr>
+<tr>
+<td><code>CodiceErroreObbligatorio</code></td>
+<td>❌ No</td>
+<td>Stringa alfanumerica</td>
+<td>✅ Sì</td>
+<td>Codice errore specifico per valore mancante/null. <strong>Es:</strong> <code>E00101</code>, <code>E00201</code></td>
+</tr>
+<tr>
+<td><code>CodiceErroreTipo</code></td>
+<td>❌ No</td>
+<td>Stringa alfanumerica</td>
+<td>✅ Sì</td>
+<td>Codice errore per tipo dato errato. <strong>Es:</strong> <code>E00102</code> (valore non numerico quando atteso <code>int</code>)</td>
+</tr>
+<tr>
+<td><code>CodiceErroreFormato</code></td>
+<td>❌ No</td>
+<td>Stringa alfanumerica</td>
+<td>✅ Sì</td>
+<td>Codice errore per formato non valido (date, pattern custom). <strong>Es:</strong> <code>E00603</code> (data non in formato <code>gg/mm/aaaa</code>)</td>
+</tr>
+<tr>
+<td><code>CodiceErroreRegex</code></td>
+<td>❌ No</td>
+<td>Stringa alfanumerica</td>
+<td>✅ Sì</td>
+<td>Codice errore per regex mismatch. <strong>Es:</strong> <code>E00404</code> (CodiceDipendente non matching <code>^DIP[0-9]{5}$</code>)</td>
+</tr>
+<tr>
+<td><code>CodiceErroreDominio</code></td>
+<td>❌ No</td>
+<td>Stringa alfanumerica</td>
+<td>✅ Sì</td>
+<td>Codice errore per valore non in <code>ValoriAmmessi</code>. <strong>Es:</strong> <code>E00805</code> (Reparto non in IT/HR/Sales/Finance/Operations)</td>
+</tr>
+<tr>
+<td><code>CodiceErroreRange</code></td>
+<td>❌ No</td>
+<td>Stringa alfanumerica</td>
+<td>✅ Sì</td>
+<td>Codice errore per valore fuori range <code>Minimo</code>-<code>Massimo</code>. <strong>Es:</strong> <code>E00706</code> (Stipendio &lt; 1500 o &gt; 150000)</td>
+</tr>
+<tr>
+<td><code>CodiceErroreLunghezza</code></td>
+<td>❌ No</td>
+<td>Stringa alfanumerica</td>
+<td>✅ Sì</td>
+<td>Codice errore per lunghezza stringa non conforme. <strong>Es:</strong> <code>E00307</code> (Cognome non tra 2 e 20 caratteri)</td>
+</tr>
+<tr>
+<td><code>CodiceErroreCustom</code></td>
+<td>❌ No</td>
+<td>Stringa alfanumerica</td>
+<td>✅ Sì</td>
+<td>Codice errore per fallimento funzione custom. <strong>Es:</strong> <code>E00508</code> (Email non RFC5322 valida)</td>
+</tr>
+<tr>
+<td><code>Note</code></td>
+<td>❌ No</td>
+<td>Testo libero</td>
+<td>N/A</td>
+<td>Descrizione campo per documentazione. Non usato in validazione</td>
+</tr>
+</tbody>
+</table>
+<h4 id="222-tipi-di-controllo-e-combinazioni">2.2.2 Tipi di Controllo e Combinazioni</h4>
+<p>Il framework supporta <strong>sette categorie di controllo qualità</strong> per ogni attributo, applicabili in combinazione secondo necessità:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo Controllo</th>
+<th>Colonne Richieste</th>
+<th>Descrizione</th>
+<th>Esempio Pratico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Obbligatorietà</strong></td>
+<td><code>Obbligatorio=true</code></td>
+<td>Verifica presenza valore non nullo/vuoto</td>
+<td><code>Nome</code> obbligatorio → valore vuoto genera errore <code>E00201</code></td>
+</tr>
+<tr>
+<td><strong>Tipo Dato</strong></td>
+<td><code>TipoDato</code></td>
+<td>Verifica conversione tipo (int, float, date, stringa)</td>
+<td><code>Stipendio</code> tipo <code>float</code> → valore <code>"ABC"</code> genera errore <code>E00702</code></td>
+</tr>
+<tr>
+<td><strong>Formato</strong></td>
+<td><code>Formato</code></td>
+<td>Valida formato specifico (date pattern, template)</td>
+<td><code>DataNascita</code> formato <code>%d/%m/%Y</code> → <code>2023-12-01</code> genera errore <code>E00603</code></td>
+</tr>
+<tr>
+<td><strong>Regex</strong></td>
+<td><code>Regex</code></td>
+<td>Match espressione regolare</td>
+<td><code>CAP</code> regex <code>^[0-9]{5}$</code> → <code>123AB</code> genera errore <code>E00904</code></td>
+</tr>
+<tr>
+<td><strong>Dominio</strong></td>
+<td><code>ValoriAmmessi</code></td>
+<td>Verifica appartenenza a set valori</td>
+<td><code>Reparto</code> valori <code>IT\|HR\|Sales</code> → <code>Marketing</code> genera errore <code>E00805</code></td>
+</tr>
+<tr>
+<td><strong>Range</strong></td>
+<td><code>Minimo</code>, <code>Massimo</code>, <code>Lunghezza</code></td>
+<td>Verifica range numerico o lunghezza stringa</td>
+<td><code>Stipendio</code> range 1500-150000 → <code>1000</code> genera errore <code>E00706</code></td>
+</tr>
+<tr>
+<td><strong>Custom</strong></td>
+<td><code>FunzioneCustom</code></td>
+<td>Logica validazione personalizzata</td>
+<td><code>Email</code> funzione <code>is_email_valid</code> → <code>nome@</code> genera errore <code>E00508</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Combinazioni Avanzate:</strong></p>
+<ol>
+<li>
+<p><strong>Enum Case-Insensitive:</strong>
+   <code>csv
+   NomeAttributo,TipoDato,ValoriAmmessi,CaseSensitive,CodiceErroreDominio
+   Attivo,stringa,SI|NO,false,E01005</code>
+   Accetta: <code>SI</code>, <code>si</code>, <code>Si</code>, <code>NO</code>, <code>no</code>, <code>No</code> (case-insensitive)</p>
+</li>
+<li>
+<p><strong>Codice Formattato con Regex + Lunghezza:</strong>
+   <code>csv
+   NomeAttributo,TipoDato,Regex,Lunghezza,CodiceErroreRegex,CodiceErroreLunghezza
+   CodiceDipendente,stringa,^DIP[0-9]{5}$,=8,E00404,E00407</code>
+   Valida: <code>DIP12345</code> (8 char, match regex)<br />
+   Errore: <code>DIP123</code> (lunghezza), <code>ABC12345</code> (regex)</p>
+</li>
+<li>
+<p><strong>Data con Formato + Range Temporale:</strong>
+   <code>csv
+   NomeAttributo,TipoDato,Formato,Minimo,Massimo,CodiceErroreFormato,CodiceErroreRange
+   DataNascita,date,%d/%m/%Y,01/01/1920,31/12/2010,E00603,E00606</code>
+   Valida: <code>15/03/1985</code> (formato corretto, entro range)<br />
+   Errore formato: <code>1985-03-15</code> (formato ISO)<br />
+   Errore range: <code>15/03/2015</code> (troppo recente)</p>
+</li>
+<li>
+<p><strong>Email Obbligatoria con Custom + Regex:</strong>
+   <code>csv
+   NomeAttributo,TipoDato,Obbligatorio,Regex,FunzioneCustom,CodiceErroreObbligatorio,CodiceErroreRegex,CodiceErroreCustom
+   Email,stringa,true,^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$,is_email_valid,E00501,E00504,E00508</code>
+   <strong>Sequenza controlli:</strong></p>
+</li>
+<li>Obbligatorietà → errore E00501 se vuota</li>
+<li>Regex → errore E00504 se formato scorretto</li>
+<li>Custom (RFC5322) → errore E00508 se sintassi invalida</li>
+</ol>
+<h4 id="223-esempio-annotato">2.2.3 Esempio Annotato</h4>
+<p>Di seguito un esempio reale di tracciato CSV con <strong>4 attributi</strong> che dimostrano diversi tipi di validazione:</p>
+<pre class="codehilite"><code class="language-csv">Indice,NomeAttributo,start,length,TipoDato,ValoriAmmessi,Minimo,Massimo,Lunghezza,Obbligatorio,Formato,FunzioneCustom,Regex,CaseSensitive,CodiceErrore,CodiceErroreObbligatorio,CodiceErroreTipo,CodiceErroreFormato,CodiceErroreRegex,CodiceErroreDominio,CodiceErroreRange,CodiceErroreLunghezza,CodiceErroreCustom,Note
+0,NumeroTest,,,int,,,,,true,,,,false,E00001,E00101,E00102,,,,,,Numero progressivo test
+3,CodiceDipendente,,,stringa,,,,=8,true,,,^DIP[0-9]{5}$,,E00004,E00401,,,E00404,,,E00407,,Codice dipendente DIPnnnnn
+6,Stipendio,,,float,,1500.00,150000.00,,true,,,,,E00007,E00701,E00702,,,,E00706,,,Stipendio mensile 1500-150000
+7,Reparto,,,stringa,IT|HR|Sales|Finance|Operations,,,,true,,,,,E00008,E00801,,,,E00805,,,Reparto aziendale
+</code></pre>
+
+<p><strong>Analisi per attributo:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Attributo</th>
+<th>Controlli Attivi</th>
+<th>Comportamento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>NumeroTest</strong></td>
+<td>Obbligatorio + Tipo int</td>
+<td>Valore vuoto → E00101<br>Valore non numerico → E00102<br>Valido: <code>1</code>, <code>42</code>, <code>999</code></td>
+</tr>
+<tr>
+<td><strong>CodiceDipendente</strong></td>
+<td>Obbligatorio + Regex + Lunghezza</td>
+<td>Valore vuoto → E00401<br>Lunghezza ≠ 8 → E00407<br>Non match <code>^DIP[0-9]{5}$</code> → E00404<br>Valido: <code>DIP00001</code>, <code>DIP99999</code></td>
+</tr>
+<tr>
+<td><strong>Stipendio</strong></td>
+<td>Obbligatorio + Tipo float + Range</td>
+<td>Valore vuoto → E00701<br>Non numerico → E00702<br>&lt; 1500 o &gt; 150000 → E00706<br>Valido: <code>2500.50</code>, <code>85000.00</code>, <code>1500</code></td>
+</tr>
+<tr>
+<td><strong>Reparto</strong></td>
+<td>Obbligatorio + Dominio enum</td>
+<td>Valore vuoto → E00801<br>Valore non in IT/HR/Sales/Finance/Operations → E00805<br>Valido: <code>IT</code>, <code>Sales</code>, <code>Finance</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>File CSV Input Esempio:</strong></p>
+<pre class="codehilite"><code class="language-csv">NumeroTest,CodiceDipendente,Stipendio,Reparto
+1,DIP12345,45000.00,IT
+,DIP98765,30000.50,HR
+3,ABC12345,25000.00,Sales
+4,DIP11111,100.00,Marketing
+5,DIP22222,NotANumber,Finance
+</code></pre>
+
+<p><strong>Risultato Validazione:</strong>
+- <strong>Riga 1:</strong> ✅ Valida
+- <strong>Riga 2:</strong> ❌ E00101 (NumeroTest vuoto)
+- <strong>Riga 3:</strong> ❌ E00404 (CodiceDipendente non match regex <code>^DIP[0-9]{5}$</code>)
+- <strong>Riga 4:</strong> ❌ E00706 (Stipendio 100 &lt; minimo 1500) + E00805 (Reparto <code>Marketing</code> non in dominio)
+- <strong>Riga 5:</strong> ❌ E00702 (Stipendio non convertibile a float)</p>
+<hr />
+<h3 id="23-workflow-configurazione-end-to-end">2.3 Workflow Configurazione End-to-End</h3>
+<p>Questa sezione descrive il <strong>processo completo</strong> per configurare un nuovo flusso di validazione Data Quality dall'analisi iniziale all'esecuzione.</p>
+<h4 id="231-checklist-configurazione-nuovo-flusso">2.3.1 Checklist Configurazione Nuovo Flusso</h4>
+<p><strong>FASE 1: Analisi e Preparazione</strong></p>
+<ul>
+<li>[ ] <strong>Acquisire specifiche tracciato</strong>: ottenere documentazione formato file (CSV/FIXED), elenco campi, tipi dato, regole business</li>
+<li>[ ] <strong>Definire regole qualità</strong>: per ogni campo, identificare:</li>
+<li>Obbligatorietà (campo può essere vuoto?)</li>
+<li>Tipo dato atteso (stringa, numero, data?)</li>
+<li>Formato specifico (pattern date, lunghezza, regex?)</li>
+<li>Domini valori (enum: solo certi valori ammessi?)</li>
+<li>Range numerici (min/max per campi numerici?)</li>
+<li>Validazioni custom (es. checksum, codice fiscale, IBAN?)</li>
+<li>[ ] <strong>Codificare errori</strong>: assegnare codici univoci per ogni tipologia errore (es. E00101, E00102, etc.)</li>
+<li>[ ] <strong>Identificare directory</strong>: stabilire path assoluti per input, output, log, archivi</li>
+</ul>
+<p><strong>FASE 2: Creazione File Tracciato</strong></p>
+<ul>
+<li>[ ] Creare file CSV tracciato (es. <code>C:\DataQuality\cfg\layouts\nuovo_flusso_layout.csv</code>)</li>
+<li>[ ] Inserire header con 23 colonne standard</li>
+<li>[ ] Aggiungere una riga per ogni attributo con:</li>
+<li>Indice progressivo (0-based)</li>
+<li>Nome attributo (identificativo univoco)</li>
+<li>Tipo dato (<code>stringa</code>, <code>int</code>, <code>float</code>, <code>date</code>)</li>
+<li>Regole validazione (obbligatorietà, formato, regex, valori ammessi, range)</li>
+<li>Codici errore specifici per ogni tipo controllo</li>
+<li>[ ] <strong>Per file CSV</strong>: lasciare vuote colonne <code>start</code> e <code>length</code></li>
+<li>[ ] <strong>Per file FIXED</strong>: valorizzare <code>start</code> e <code>length</code>, <code>TipoDato</code> opzionale</li>
+<li>[ ] Salvare file con encoding UTF-8</li>
+</ul>
+<p><strong>FASE 3: Creazione File Configurazione Flusso</strong></p>
+<ul>
+<li>[ ] Creare file INI flusso (es. <code>C:\DataQuality\cfg\flows\nuovo_flusso.cfg</code>)</li>
+<li>[ ] Sezione <code>[INPUT]</code>:
+  <code>ini
+  DQ_DIR_TO_SCAN=C:\DataQuality\input\pending\nuovo_flusso\
+  DQ_FILE_TO_WORK=nuovo_flusso_*.csv
+  DQ_FILE_TRACCIATO=C:\DataQuality\cfg\layouts\nuovo_flusso_layout.csv</code></li>
+<li>[ ] Sezione <code>[OUTPUT]</code>:
+  <code>ini
+  OUTPUT_DIR_VALID=C:\DataQuality\output\nuovo_flusso\success\
+  OUTPUT_DIR_ERROR=C:\DataQuality\output\nuovo_flusso\error\
+  OUTPUT_DIR_REPORTS=C:\DataQuality\output\nuovo_flusso\reports\
+  OUTPUT_DIR_STATS=C:\DataQuality\output\nuovo_flusso\statistics\</code></li>
+<li>[ ] Sezione <code>[FORMAT]</code>:
+  <code>ini
+  FILE_FORMAT=CSV
+  FILE_ENCODING=utf-8
+  CSV_FIELD_SEPARATOR=,
+  CSV_TEXT_QUALIFIER="
+  CSV_SKIP_HEADER_ROWS=1
+  ERROR_CODES_SEPARATOR=|</code></li>
+<li>[ ] Sezione <code>[LOGGING]</code> (opzionale, override sistema):
+  <code>ini
+  LOG_LEVEL=INFO
+  DQ_ENABLE_FIELD_LOGGING=false
+  DQ_ENABLE_ROW_LOGGING=false</code></li>
+<li>[ ] Sezione <code>[PATTERN_MATCHING]</code> (opzionale per batch):
+  <code>ini
+  PROCESS_WHICH=first
+  SORT_KEYS=nome[18:8:numero:desc]</code></li>
+</ul>
+<p><strong>FASE 4: Registrazione Mapping</strong></p>
+<ul>
+<li>[ ] Editare <code>DataQualityFramework.cfg</code></li>
+<li>[ ] Aggiungere mapping nella sezione <code>[MAPPING_FLUSSI]</code>:
+  <code>ini
+  NUOVO_FLUSSO=C:\DataQuality\cfg\flows\nuovo_flusso.cfg</code></li>
+<li>[ ] Verificare che identificativo sia univoco (non duplicare nomi esistenti)</li>
+</ul>
+<p><strong>FASE 5: Preparazione Ambiente</strong></p>
+<ul>
+<li>[ ] Creare fisicamente tutte le directory specificate:</li>
+<li>Directory input: <code>C:\DataQuality\input\pending\nuovo_flusso\</code></li>
+<li>Directory output (4): success, error, reports, statistics</li>
+<li>[ ] Verificare permessi scrittura su tutte le directory</li>
+<li>[ ] Predisporre file di test in directory input</li>
+</ul>
+<p><strong>FASE 6: Test e Validazione</strong></p>
+<ul>
+<li>[ ] Eseguire primo test con file di esempio:
+  <code>powershell
+  DataQualityFramework.exe NUOVO_FLUSSO</code></li>
+<li>[ ] Verificare avvio corretto (nessun errore configurazione exit code 2)</li>
+<li>[ ] Controllare log generato in <code>PATH_LOG</code> per messaggi CRITICAL/ERROR</li>
+<li>[ ] Verificare generazione file output:</li>
+<li>File <code>.ok</code> in <code>OUTPUT_DIR_VALID</code> (se record validi)</li>
+<li>File <code>.ko</code> in <code>OUTPUT_DIR_ERROR</code> (se record scartati)</li>
+<li>File <code>.codici</code> in <code>OUTPUT_DIR_REPORTS</code> (anagrafica errori)</li>
+<li>File <code>.stats</code> in <code>OUTPUT_DIR_STATS</code> (statistiche elaborazione)</li>
+<li>[ ] Analizzare file <code>.ko</code> per verificare corretta applicazione regole:</li>
+<li>Colonna <code>DQ_ERROR_CODES</code> contiene codici attesi</li>
+<li>Separatore errori (<code>|</code>) funzionante</li>
+<li>[ ] Testare casi limite:</li>
+<li>File vuoto (solo header)</li>
+<li>File con tutte righe valide</li>
+<li>File con tutte righe invalide</li>
+<li>File con valori edge case (min/max, enum boundaries)</li>
+</ul>
+<p><strong>FASE 7: Documentazione</strong></p>
+<ul>
+<li>[ ] Documentare mappatura codici errore → descrizione business</li>
+<li>[ ] Creare runbook operativo (frequenza esecuzione, gestione file output, escalation errori)</li>
+<li>[ ] Aggiornare documentazione enterprise con nuovo flusso</li>
+</ul>
+<h4 id="232-diagramma-relazionale-configurazione">2.3.2 Diagramma Relazionale Configurazione</h4>
+<p>Il seguente diagramma illustra le relazioni tra i <strong>tre file di configurazione</strong> e il processo di elaborazione:</p>
+<div class="mermaid">graph TB
+    subgraph INPUT[&quot;📥 Input&quot;]
+        FileData[&quot;📄 File Dati&lt;br&gt;(CSV/FIXED)&quot;]
+    end
+
+    subgraph CONFIG[&quot;⚙️ Configurazione&quot;]
+        Sistema[&quot;📋 DataQualityFramework.cfg&lt;br&gt;&lt;b&gt;Sistema&lt;/b&gt;&lt;br&gt;- PATH_LOG&lt;br&gt;- LOG_LEVEL&lt;br&gt;- Mapping flussi&quot;]
+        Flusso[&quot;📋 flusso_specifico.cfg&lt;br&gt;&lt;b&gt;Flusso&lt;/b&gt;&lt;br&gt;- DQ_DIR_TO_SCAN&lt;br&gt;- OUTPUT_DIR_*&lt;br&gt;- CSV_FIELD_SEPARATOR&lt;br&gt;- Pattern matching&quot;]
+        Tracciato[&quot;📊 layout.csv&lt;br&gt;&lt;b&gt;Tracciato&lt;/b&gt;&lt;br&gt;- Struttura attributi&lt;br&gt;- Regole validazione&lt;br&gt;- Codici errore&quot;]
+    end
+
+    subgraph FRAMEWORK[&quot;🔧 Framework&quot;]
+        Engine[&quot;Data Quality&lt;br&gt;Engine&quot;]
+    end
+
+    subgraph OUTPUT[&quot;📤 Output&quot;]
+        Valid[&quot;✅ File .ok&lt;br&gt;(record validi)&quot;]
+        Error[&quot;❌ File .ko&lt;br&gt;(record scartati)&quot;]
+        Codes[&quot;📋 File .codici&lt;br&gt;(anagrafica errori)&quot;]
+        Stats[&quot;📊 File .stats&lt;br&gt;(statistiche)&quot;]
+        LogFile[&quot;📜 File .log&lt;br&gt;(tracciatura)&quot;]
+    end
+
+    Sistema --&gt;|&quot;1️⃣ Carica config sistema&quot;| Engine
+    Sistema --&gt;|&quot;2️⃣ Risolve mapping&quot;| Flusso
+    Flusso --&gt;|&quot;3️⃣ Merge parametri&quot;| Engine
+    Tracciato --&gt;|&quot;4️⃣ Carica regole&quot;| Engine
+    FileData --&gt;|&quot;5️⃣ Legge dati&quot;| Engine
+
+    Engine --&gt;|&quot;Record validi&quot;| Valid
+    Engine --&gt;|&quot;Record scartati&quot;| Error
+    Engine --&gt;|&quot;Report errori&quot;| Codes
+    Engine --&gt;|&quot;Statistiche&quot;| Stats
+    Engine --&gt;|&quot;Log operazioni&quot;| LogFile
+
+    style Sistema fill:#e1f5ff
+    style Flusso fill:#e1f5ff
+    style Tracciato fill:#fff4e1
+    style Engine fill:#f0f0f0
+    style Valid fill:#d4edda
+    style Error fill:#f8d7da
+    style Codes fill:#fff3cd
+    style Stats fill:#d1ecf1
+    style LogFile fill:#e2e3e5
+</div>
+
+<p><strong>Legenda flusso:</strong>
+1. <strong>Sistema</strong>: Framework carica configurazione base (<code>DataQualityFramework.cfg</code>)
+2. <strong>Mapping</strong>: Framework risolve parametro invocazione → path file flusso
+3. <strong>Merge</strong>: Parametri flusso sovrascrivono parametri sistema (priority)
+4. <strong>Tracciato</strong>: Framework carica regole validazione dal file layout
+5. <strong>Elaborazione</strong>: Applica regole a ogni record del file dati
+6. <strong>Output</strong>: Genera 5 file output (ok, ko, codici, stats, log)</p>
+<p><strong>Hierarchy Priority Visual:</strong></p>
+<pre class="codehilite"><code>🥇 FLUSSO (flusso_specifico.cfg) - Priorità MASSIMA
+    ⬇️ override
+🥈 SISTEMA (DataQualityFramework.cfg) - Priorità MEDIA
+    ⬇️ override
+🥉 DEFAULT (hardcoded) - Priorità BASSA
+</code></pre>
+
+<hr />
+<h2 id="3-flussi-di-output_1">📤 3. Flussi di Output</h2>
+<p>Il <strong><em>Data Quality Framework</em></strong> produce automaticamente una serie di file di output che documentano in modo completo e strutturato l'esito del processo di validazione. Ogni elaborazione genera quattro tipologie distinte di deliverable, ciascuno con uno scopo specifico: i file validati, i file scartati con diagnostica dettagliata degli errori, l'anagrafica completa dei codici errore rilevati, e le statistiche aggregate di qualità. Questa sezione descrive nel dettaglio la struttura, il contenuto e l'utilizzo di ciascun tipo di output prodotto dal framework.</p>
+<h3 id="31-file-di-scarto-ko">3.1 File di Scarto (.ko)</h3>
+<p>Il <strong><em>Data Quality Framework</em></strong> genera automaticamente un <strong>flusso di scarto</strong> contenente tutti i record che non hanno rispettato almeno uno dei controlli di qualità formali previsti nel tracciato di validazione. Questo file rappresenta uno strumento fondamentale per l'analisi delle non conformità e per l'identificazione delle azioni correttive necessarie sui dati sorgente.</p>
+<h4 id="311-struttura-del-file-di-scarto">3.1.1 Struttura del File di Scarto</h4>
+<p>Il file di scarto mantiene <strong>esattamente la stessa struttura</strong> del file di input originale, preservando tutti gli attributi nella medesima sequenza e formato. A questa struttura viene aggiunta, in coda, <strong>una colonna aggiuntiva</strong> denominata <code>DQ_ERROR_CODES</code> che contiene la lista completa dei codici errore rilevati per quella specifica riga durante il processo di validazione.</p>
+<p><strong>Caratteristiche distintive:</strong></p>
+<ul>
+<li><strong>Tracciato identico</strong>: La struttura dati rimane immutata rispetto all'input, facilitando analisi comparative e riconciliazioni</li>
+<li><strong>Attributo diagnostico</strong>: La colonna <code>DQ_ERROR_CODES</code> fornisce visibilità immediata su quali controlli sono falliti</li>
+<li><strong>Separatore configurabile</strong>: I codici errore sono separati da un carattere delimitatore definito nel parametro di configurazione <code>ERROR_CODES_SEPARATOR</code></li>
+<li><strong>Tracciabilità completa</strong>: Ogni record scartato può essere analizzato nel dettaglio per comprendere le cause specifiche del fallimento</li>
+</ul>
+<h4 id="312-esempio-file-csv">3.1.2 Esempio File CSV</h4>
+<p>Per file in formato <strong>CSV delimitato</strong>, il file di scarto aggiunge la colonna <code>DQ_ERROR_CODES</code> come ultimo campo della riga:</p>
+<p><strong>File Input Originale</strong> (<code>dipendenti.csv</code>):</p>
+<pre class="codehilite"><code class="language-csv">NumeroTest,Nome,Cognome,CodiceDipendente,Email,DataNascita,Stipendio,Reparto,CAP,Attivo
+1,Mario,Rossi,DIP00001,mario.rossi@company.com,15/03/1985,45000.00,IT,00100,SI
+2,Laura,Bianchi,DIP00002,laura.bianchi@company.com,22/07/1990,52000.00,HR,20100,SI
+3,G,Verdi,DIP99,email_invalida,32/13/1980,500,REPARTO_INESISTENTE,1234,FORSE
+</code></pre>
+
+<p><strong>File Scarto Generato</strong> (<code>dipendenti.csv.ko</code>):</p>
+<pre class="codehilite"><code class="language-csv">NumeroTest,Nome,Cognome,CodiceDipendente,Email,DataNascita,Stipendio,Reparto,CAP,Attivo,DQ_ERROR_CODES
+3,G,Verdi,DIP99,email_invalida,32/13/1980,500,REPARTO_INESISTENTE,1234,FORSE,E00002|E00004|E00005|E00006|E00007|E00008|E00009|E00010
+</code></pre>
+
+<p><strong>Interpretazione:</strong>
+- Il record numero 3 è stato scartato perché ha violato 8 controlli di validazione distinti
+- Il separatore <code>|</code> (pipe) è configurato tramite il parametro <code>ERROR_CODES_SEPARATOR=|</code>
+- Consultando l'anagrafica codici errore (sezione 3.2), è possibile identificare esattamente quali attributi hanno fallito quali controlli</p>
+<p><strong>⚠️ Attenzione al Separatore:</strong>
+Il parametro <code>ERROR_CODES_SEPARATOR</code> <strong>deve essere diverso</strong> dal separatore CSV (<code>CSV_FIELD_SEPARATOR</code>) per evitare collisioni di parsing. Ad esempio:
+- Se <code>CSV_FIELD_SEPARATOR=,</code> allora usa <code>ERROR_CODES_SEPARATOR=|</code> oppure <code>;</code> oppure <code>~</code>
+- Se <code>CSV_FIELD_SEPARATOR=;</code> allora usa <code>ERROR_CODES_SEPARATOR=|</code> oppure <code>,</code></p>
+<h4 id="313-esempio-file-fixed-fixed-width">3.1.3 Esempio File FIXED (Fixed-Width)</h4>
+<p>Per file in formato <strong>FIXED a lunghezza fissa</strong>, i codici errore vengono accodati <strong>immediatamente dopo l'ultimo byte</strong> della riga a lunghezza fissa, senza alcun delimitatore speciale che separi la porzione fixed dai codici:</p>
+<p><strong>File Input Originale</strong> (<code>dipendenti.dat</code> - lunghezza riga: 80 caratteri):</p>
+<pre class="codehilite"><code>Mario     Rossi     DIP00001  mario.rossi@company.com     15/03/1985  45000.00IT  00100SI
+Laura     Bianchi   DIP00002  laura.bianchi@company.com   22/07/1990  52000.00HR  20100SI
+G         Verdi     DIP99     email_invalida              32/13/1980  500     REPO1234  FO
+</code></pre>
+
+<p><strong>File Scarto Generato</strong> (<code>dipendenti.dat.ko</code>):</p>
+<p>La riga scartata viene estesa con i codici errore immediatamente dopo il byte 80:</p>
+<pre class="codehilite"><code>         1         2         3         4         5         6         7         8
+12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345
+G         Verdi     DIP99     email_invalida              32/13/1980  500     REPO1234  FO|E00002|E00004|E00005|E00006|E00007|E00008|E00009|E00010
+└─────────────────────────────────────────────────────────────────────────────────────┘│└─ Codici errore
+                        Tracciato originale a lunghezza fissa (80 byte)                Byte 81
+</code></pre>
+
+<p><strong>Caratteristiche FIXED:</strong>
+- <strong>Byte 1-80</strong>: Riga originale a lunghezza fissa completamente preservata
+- <strong>Byte 81+</strong>: Codici errore separati dal carattere configurato in <code>ERROR_CODES_SEPARATOR</code>
+- <strong>Parsing semplice</strong>: La porzione fixed termina esattamente al byte previsto dal tracciato, i codici iniziano immediatamente dopo
+- <strong>Nessun delimitatore speciale</strong>: Non sono necessari marcatori come <code>[ERRORI:]</code> o simili, la posizione è deterministica</p>
+<p><strong>Configurazione Esempio:</strong></p>
+<pre class="codehilite"><code class="language-ini"># File: dipendenti_fixed.cfg
+
+FILE_FORMAT=FIXED
+FILE_ENCODING=utf-8
+
+# Separatore tra codici errore (aggiunto in coda alla riga fixed)
+ERROR_CODES_SEPARATOR=|
+</code></pre>
+
+<h4 id="314-utilizzo-operativo">3.1.4 Utilizzo Operativo</h4>
+<p>Il file di scarto costituisce uno strumento fondamentale per diverse attività operative:</p>
+<ul>
+<li><strong>Bonifica Dati</strong>: Identificazione puntuale dei record da correggere nei sistemi sorgente</li>
+<li><strong>Comunicazione Fornitori</strong>: Evidenza chiara delle non conformità da comunicare ai data provider</li>
+<li><strong>Analisi Cause</strong>: Studio delle tipologie di errori più frequenti per identificare problemi sistemici</li>
+<li><strong>Riconciliazione</strong>: Confronto tra versione scartata e versione corretta dopo bonifica</li>
+<li><strong>Audit e Compliance</strong>: Documentazione formale delle non conformità rilevate per verifiche di qualità</li>
+</ul>
+<p>La presenza della colonna <code>DQ_ERROR_CODES</code> rende immediata l'identificazione della natura degli errori, mentre il mantenimento della struttura originale permette di utilizzare gli stessi strumenti di analisi dati (Excel, Python, SQL) già in uso per il file di input.</p>
+<hr />
+<h3 id="32-anagrafica-codici-errore-codici">3.2 Anagrafica Codici Errore (.codici)</h3>
+<p>Il framework genera automaticamente un <strong>file di anagrafica</strong> che documenta in modo dettagliato tutti i codici errore rilevati durante il processo di validazione. Questo deliverable fornisce una mappatura completa tra codici errore, attributi coinvolti, tipologia di controllo fallito e descrizione testuale della violazione riscontrata.</p>
+<h4 id="321-struttura-del-file">3.2.1 Struttura del File</h4>
+<p>Il file <code>.codici</code> è un file di testo strutturato con formato a colonne fisse, contenente per ogni codice errore rilevato:</p>
+<ul>
+<li><strong>CodiceErrore</strong>: Identificativo univoco dell'errore (es: <code>E00002</code>, <code>E00004</code>)</li>
+<li><strong>NomeAttributo</strong>: Nome del campo che ha generato l'errore</li>
+<li><strong>TipoDato</strong>: Tipo di dato atteso per l'attributo (stringa, intero, float, data, bool)</li>
+<li><strong>Obbligatorio</strong>: Indica se il campo è obbligatorio (Si/No)</li>
+<li><strong>TipoControllo</strong>: Categoria della validazione fallita (Obbligatorietà, Tipo Dato, Pattern Regex, Valori Ammessi, Range Numerico, Lunghezza, Formato Data, Funzione Custom)</li>
+<li><strong>Descrizione</strong>: Spiegazione dettagliata del controllo che ha generato l'errore</li>
+</ul>
+<p><strong>Esempio:</strong></p>
+<pre class="codehilite"><code>CodiceErrore,NomeAttributo,TipoDato,Obbligatorio,TipoControllo,Descrizione
+E00002,Nome,stringa,Si,Lunghezza,Lunghezza minima: 2 - Lunghezza massima: 20
+E00004,CodiceDipendente,stringa,Si,Pattern Regex,Il valore non rispetta il formato richiesto (pattern: ^DIP[0-9]{5}$)
+E00005,Email,stringa,Si,Funzione Custom,Formato email non valido
+E00006,DataNascita,data,Si,Formato Data,Formato data non valido - formato atteso: %d/%m/%Y
+E00007,Stipendio,float,Si,Tipo Dato,Il valore non è un numero decimale valido
+E00008,Stipendio,float,Si,Range Numerico,Valore fuori dal range consentito (da 1500.00 a 150000.00)
+E00009,Reparto,stringa,Si,Valori Ammessi,&quot;Valore non ammesso. Valori consentiti: IT, HR, Sales, Finance, Operations&quot;
+E00010,CAP,stringa,Si,Pattern Regex,Il valore non rispetta il formato richiesto (CAP italiano 5 cifre)
+</code></pre>
+
+<h4 id="322-utilizzo-operativo">3.2.2 Utilizzo Operativo</h4>
+<p>L'anagrafica codici errore è fondamentale per:</p>
+<ul>
+<li><strong>Decodifica Errori</strong>: Interpretazione immediata dei codici presenti nei file di scarto</li>
+<li><strong>Documentazione</strong>: Riferimento ufficiale per comunicazioni con fornitori dati e stakeholder</li>
+<li><strong>Analisi Distribuzione</strong>: Studio della frequenza di specifiche tipologie di errore</li>
+<li><strong>Troubleshooting</strong>: Diagnosi rapida delle cause di scarto dei record</li>
+</ul>
+<p>Questo file viene generato automaticamente leggendo il tracciato di validazione e contando le occorrenze effettive di ciascun codice errore durante l'elaborazione.</p>
+<hr />
+<h3 id="33-report-statistiche-stats">3.3 Report Statistiche (.stats)</h3>
+<p>Il framework produce automaticamente un <strong>report statistico completo</strong> che documenta in modo quantitativo e strutturato l'esito del processo di validazione. Questo deliverable rappresenta uno strumento fondamentale per il monitoraggio continuo della qualità dei dati, fornendo visibilità immediata sulle performance del dataset analizzato e sulle aree che richiedono interventi di bonifica.</p>
+<p>Il report statistico viene generato al termine di ogni elaborazione e raccoglie metriche aggregate su più livelli: informazioni generali di processo, configurazione degli attributi, statistiche dettagliate per ciascun campo del tracciato, e distribuzione completa degli errori rilevati per tipologia. L'output è strutturato in formato testo con separatori grafici per facilitare la lettura sia manuale che l'eventuale parsing automatico per sistemi di reportistica aziendali.</p>
+<h4 id="331-struttura-del-report">3.3.1 Struttura del Report</h4>
+<p>Il file <code>.stats</code> è organizzato in <strong>cinque sezioni</strong> distinte che documentano progressivamente tutti gli aspetti dell'elaborazione:</p>
+<p><strong>1. Informazioni Processo</strong></p>
+<p>Questa sezione fornisce il contesto operativo completo dell'elaborazione eseguita:</p>
+<ul>
+<li><strong>Nome Processo</strong>: Identificativo funzionale del flusso elaborato</li>
+<li><strong>File Elaborato</strong>: Path completo del file dati sottoposto a validazione</li>
+<li><strong>File Configurazione</strong>: Path del tracciato CSV utilizzato per le regole di validazione</li>
+<li><strong>Timestamp Elaborazione</strong>: Data/ora di inizio e fine processo con precisione al millisecondo</li>
+<li><strong>Durata Elaborazione</strong>: Tempo totale impiegato (ore, minuti, secondi, millisecondi)</li>
+<li><strong>Metriche Volumetriche</strong>: </li>
+<li>Righe totali elaborate</li>
+<li>Righe valide (numero assoluto e percentuale)</li>
+<li>Righe con errori (numero assoluto e percentuale)</li>
+<li><strong>Qualità Dati</strong>: Indicatore sintetico percentuale di conformità del dataset</li>
+<li><strong>Attributi Configurati</strong>: Numero totale di campi definiti nel tracciato di validazione</li>
+<li><strong>File Generati</strong>: Path completi di tutti i file output prodotti (validi, scartati, codici errore, statistiche, log)</li>
+</ul>
+<p><strong>2. Configurazione Attributi e Controlli</strong></p>
+<p>Tabella di riepilogo che documenta la struttura del tracciato utilizzato per la validazione. Per ciascun attributo vengono riportati:</p>
+<ul>
+<li><strong>Posizione</strong>: Indice sequenziale dell'attributo (formato FIXED: posizione byte, formato CSV: ordine colonne)</li>
+<li><strong>Nome Attributo</strong>: Denominazione del campo</li>
+<li><strong>Start/Length</strong> (solo FIXED): Coordinate di estrazione (byte iniziale e lunghezza)</li>
+<li><strong>Tipo Dato</strong>: Tipologia attesa (int, stringa, float, date, bool)</li>
+<li><strong>Obbligatorietà</strong>: Indicatore Sì/No sulla mandatory del campo</li>
+<li><strong>Funzione Validazione</strong>: Nome della funzione custom applicata (se configurata)</li>
+<li><strong>Formato/Parametri</strong>: Dettaglio dei controlli configurati (pattern regex, range valori, lunghezza, formato data, domini ammessi)</li>
+</ul>
+<p>Questa tabella costituisce una <strong>documentazione runtime</strong> che permette di verificare immediatamente quali regole sono state applicate durante la validazione, facilitando l'interpretazione delle statistiche successive.</p>
+<p><strong>3. Statistiche Dettagliate per Attributo</strong></p>
+<p>Tabella analitica che riporta per ciascun campo del tracciato le seguenti metriche:</p>
+<ul>
+<li><strong>Totali</strong>: Numero di record elaborati</li>
+<li><strong>Presenti</strong>: Numero di record con valore valorizzato</li>
+<li><strong>Assenti</strong>: Numero di record con valore mancante o vuoto</li>
+<li><strong>Validi</strong>: Numero di record che hanno superato tutti i controlli di validazione per quel campo</li>
+<li><strong>Errati</strong>: Numero di record che hanno violato almeno un controllo per quel campo</li>
+<li><strong>% Completezza</strong>: Percentuale di valorizzazione del campo (Presenti/Totali)</li>
+<li><strong>% Correttezza</strong>: Percentuale di validità formale dei valori presenti (Validi/Totali)</li>
+</ul>
+<p>Questa sezione permette di identificare immediatamente:
+- Campi con alta percentuale di valori mancanti (problemi di completezza)
+- Campi con alta percentuale di errori formali (problemi di conformità)
+- Attributi più critici che richiedono interventi prioritari di bonifica</p>
+<p><strong>4. Riepilogo Errori per Codice</strong></p>
+<p>Tabella di distribuzione degli errori che documenta per ciascun codice errore configurato nel tracciato:</p>
+<ul>
+<li><strong>Codice</strong>: Identificativo univoco dell'errore (formato <code>E00001</code>, <code>E00002</code>, ecc.)</li>
+<li><strong>Attributo</strong>: Nome del campo associato al codice errore</li>
+<li><strong>Occorrenze</strong>: Numero di volte che l'errore è stato rilevato nell'elaborazione</li>
+<li><strong>% Errori</strong>: Percentuale dell'errore rispetto al totale errori rilevati</li>
+<li><strong>Descrizione</strong>: Spiegazione testuale della tipologia di controllo fallito</li>
+</ul>
+<p>Questa distribuzione consente di comprendere quali sono le violazioni più frequenti, orientando le azioni correttive verso le problematiche con maggiore impatto quantitativo.</p>
+<p><strong>5. Totale Errori Verificati</strong></p>
+<p>Contatore aggregato che riporta il numero totale di violazioni rilevate durante l'elaborazione. Si noti che questo totale può essere superiore al numero di record scartati, poiché un singolo record può violare contemporaneamente più controlli su attributi diversi.</p>
+<h4 id="332-esempio-report-reale">3.3.2 Esempio Report Reale</h4>
+<p>Di seguito un estratto di report statistico prodotto da un'elaborazione reale su un file FIXED di 50 record:</p>
+<pre class="codehilite"><code>========================================================================================================================
+📊 REPORT STATISTICHE DATA QUALITY CHECK
+========================================================================================================================
+
+ℹ️  INFORMAZIONI PROCESSO
+------------------------------------------------------------------------------------------------------------------------
+📋 Nome Processo                : DIPENDENTI_FIXED
+📂 File CSV Elaborato           : C:\Python\demo\fixed\input\pending\dipendenti_fixed_20251101.dat
+⚙️ File Configurazione          : C:\Python\demo\fixed\cfg\layouts\dipendenti_fixed_layout.csv
+🕐 Data/Ora Inizio              : 11/11/2025 11:59:30.576
+🕑 Data/Ora Fine                : 11/11/2025 11:59:30.976
+⌛ Durata                       : 0h 0m 0s 130ms
+📊 Righe Totali Elaborate       : 50
+✅ Righe Valide                 : 14 (28.00%)
+❌ Righe con Errori             : 36 (72.00%)
+🔴 Qualità Dati                 : 28.00%
+🔧 Attributi Configurati        : 10
+
+📁 FILE GENERATI
+------------------------------------------------------------------------------------------------------------------------
+File Righe Valide       : C:\Python\demo\fixed\output\success\dipendenti_fixed_20251101.dat.ok
+File Righe con Errori   : C:\Python\demo\fixed\output\error\dipendenti_fixed_20251101.dat.ko
+File Lista Codici Errori: C:\Python\demo\fixed\output\report\dipendenti_fixed_20251101.dat.codici
+File Statistiche        : C:\Python\demo\fixed\output\statistics\dipendenti_fixed_20251101.dat.stats
+File Log Processo       : C:\Python\log\DIPENDENTI_FIXED_20251111115930578.log
+
+⚙️  CONFIGURAZIONE ATTRIBUTI E CONTROLLI
+------------------------------------------------------------------------------------------------------------------------
+ Pos. Attributo         Start  Len  Tipo      Obblig.  Funzione Validazione         Formato/Parametri                  
+------------------------------------------------------------------------------------------------------------------------
+000   NumeroTest            1    5  int       Sì                                    -                                  
+001   Nome                  6   20  stringa   Sì                                    Lung: 2-20                         
+002   Cognome              26   20  stringa   Sì                                    Lung: 2-20                         
+003   CodiceDipendente     46    8  stringa   Sì                                    Pattern: ^DIP[0-9]{5}$             
+004   Email                54   50  stringa   Sì       is_email_valid               -                                  
+005   DataNascita         104   10  date      Sì       is_data_valid                %d/%m/%Y                           
+006   Stipendio           114   10  float     Sì                                    -                                  
+007   Reparto             124   15  stringa   Sì                                    -                                  
+008   CAP                 139    6  stringa   Sì                                    Pattern: ^[0-9]{5}$                
+009   Attivo              145    2  stringa   Sì                                    -                                  
+
+📈 STATISTICHE DETTAGLIATE PER ATTRIBUTO
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Pos. Attributo        Obblig.   Totali   Presenti   Assenti   Validi    Errati    % Compl.   % Corrett.  
+--------------------------------------------------------------------------------------------------------------------------------------------
+000   NumeroTest       Si        50       50         0         50        0          100.00%    100.00%
+001   Nome             Si        50       50         0         50        0          100.00%    100.00%
+002   Cognome          Si        50       50         0         50        0          100.00%    100.00%
+003   CodiceDipendente Si        50       50         0         45        5          100.00%     90.00%
+004   Email            Si        50       50         0         39        11         100.00%     78.00%
+005   DataNascita      Si        50       50         0         37        13         100.00%     74.00%
+006   Stipendio        Si        50       50         0         42        8          100.00%     84.00%
+007   Reparto          Si        50       50         0         42        8          100.00%     84.00%
+008   CAP              Si        50       50         0         42        8          100.00%     84.00%
+009   Attivo           Si        50       50         0         50        0          100.00%    100.00%
+
+❌ RIEPILOGO ERRORI PER CODICE
+------------------------------------------------------------------------------------------------------------------------
+Codice     Attributo        Occorrenze   % Errori     Descrizione                                       
+------------------------------------------------------------------------------------------------------------------------
+E00404     CodiceDipendente 5             7.58%       Formato non valido (pattern: ^DIP[0-9]{5}$)
+E00508     Email            11           16.67%       Email non valida (formato RFC5322)
+E00603     DataNascita      13           19.70%       Data non valida (formato atteso: %d/%m/%Y)
+E00706     Stipendio        8            12.12%       Valore numerico non valido (tipo atteso: float)
+E00805     Reparto          8            12.12%       Valore non ammesso (valori validi: IT|HR|Sales|Finance|Operations)
+E00904     CAP              8            12.12%       Formato non valido (lunghezza attesa: =5 caratteri)
+------------------------------------------------------------------------------------------------------------------------
+TOTALE ERRORI VERIFICATI         66           100.00%
+
+========================================================================================================================
+📅 Report generato il 11/11/2025 alle 11:59:30
+========================================================================================================================
+</code></pre>
+
+<p><strong>Analisi dell'esempio:</strong></p>
+<p>Nell'elaborazione mostrata sono stati processati 50 record di dipendenti: di questi, solo 14 (28%) hanno superato tutti i controlli, mentre 36 record (72%) presentano almeno un errore di validazione. La <strong>qualità dati del 28%</strong> evidenzia una situazione critica che richiede interventi di bonifica urgenti.</p>
+<p><strong>Analizzando le statistiche per attributo emerge che:</strong></p>
+<ul>
+<li>I campi <strong>NumeroTest</strong>, <strong>Nome</strong>, <strong>Cognome</strong> e <strong>Attivo</strong> hanno una correttezza del <strong>100%</strong></li>
+<li>Il campo <strong>DataNascita</strong> presenta la correttezza più bassa (<strong>74%</strong>), con 13 errori su 50 record</li>
+<li>Il campo <strong>Email</strong> mostra una correttezza del <strong>78%</strong>, con 11 email non conformi al formato RFC5322</li>
+<li>I campi <strong>CodiceDipendente</strong> (<strong>90%</strong>), <strong>Stipendio</strong> (<strong>84%</strong>), <strong>Reparto</strong> (<strong>84%</strong>) e <strong>CAP</strong> (<strong>84%</strong>) presentano livelli intermedi di conformità</li>
+</ul>
+<p><strong>La distribuzione degli errori evidenzia che le violazioni più frequenti riguardano:</strong></p>
+<ol>
+<li><strong>Date non valide</strong> (19.70% degli errori totali)</li>
+<li>Date inesistenti come 31/02 o 30/02</li>
+<li>
+<p>Formati non conformi al pattern %d/%m/%Y</p>
+</li>
+<li>
+<p><strong>Email non valide</strong> (16.67% degli errori totali)</p>
+</li>
+<li>Formati incompleti o malformati</li>
+<li>
+<p>Mancanza di @ o dominio non valido</p>
+</li>
+<li>
+<p><strong>Errori con incidenza simile</strong> (~12% ciascuno):</p>
+</li>
+<li><strong>Stipendi fuori range</strong>: valori non numerici o fuori dai limiti configurati</li>
+<li><strong>Reparti non ammessi</strong>: codici reparto non presenti nella lista valori consentiti</li>
+<li><strong>CAP non validi</strong>: lunghezza diversa da 5 caratteri o formati non numerici</li>
+</ol>
+<p><strong>Prioritizzazione interventi:</strong></p>
+<p>Questo tipo di analisi permette di prioritizzare gli interventi di bonifica concentrandosi su:
+- <strong>Campo DataNascita</strong>: richiede verifica urgente dei processi di data entry
+- <strong>Campo Email</strong>: necessita validazione formale e possibile reimport da sistemi anagrafici
+- <strong>Campi con errori distribuiti</strong>: interventi mirati su record specifici per correzioni puntuali</p>
+<h4 id="333-utilizzo-operativo">3.3.3 Utilizzo Operativo</h4>
+<p>Il report statistico è fondamentale per:</p>
+<ul>
+<li><strong>Monitoraggio Qualità</strong>: KPI oggettivi e quantificabili sulla conformità dei dati rispetto agli standard definiti</li>
+<li><strong>Reportistica Management</strong>: Metriche aggregate per decision maker e stakeholder aziendali</li>
+<li><strong>Identificazione Pattern</strong>: Analisi delle tipologie di errori ricorrenti per identificare problemi sistemici nei processi di data entry o nelle integrazioni upstream</li>
+<li><strong>Tracciamento Miglioramenti</strong>: Confronto tra elaborazioni successive dello stesso flusso per verificare l'efficacia delle azioni correttive implementate</li>
+<li><strong>SLA e Compliance</strong>: Verifica del rispetto degli obiettivi di qualità contrattualizzati con fornitori dati o definiti in policy aziendali</li>
+<li><strong>Prioritizzazione Interventi</strong>: Individuazione degli attributi più critici su cui concentrare gli sforzi di bonifica dati</li>
+<li><strong>Audit e Certificazioni</strong>: Documentazione formale della qualità dei dati per verifiche di conformità normativa (GDPR, SOX, ecc.)</li>
+</ul>
+<hr />
+<h3 id="34-file-di-log">3.4 File di Log</h3>
+<p>Il <strong><em>Data Quality Framework</em></strong> genera automaticamente un <strong>file di log strutturato e gerarchico</strong> che documenta in modo esaustivo l'intero ciclo di vita del processo di validazione, dal caricamento delle configurazioni fino alla produzione dei file di output finali. Il log costituisce uno strumento fondamentale per l'auditing delle operazioni, il troubleshooting di anomalie, l'analisi delle performance e la compliance normativa.</p>
+<p>Ogni esecuzione del framework produce un file di log univoco identificato da un naming convenzionale che include il nome funzionale del processo e il timestamp di avvio con precisione al millisecondo (esempio: <code>DIPENDENTI_FIXED_20251111115930578.log</code>). Questa convenzione facilita la correlazione immediata tra i file di output prodotti (validi, scartati, statistiche) e le relative tracce di elaborazione, permettendo ricostruzioni post-mortem accurate in caso di anomalie o contestazioni.</p>
+<h4 id="341-struttura-del-log">3.4.1 Struttura del Log</h4>
+<p>Il file di log utilizza un <strong>formato testo strutturato a riga singola</strong> con separazione a pipe (<code>|</code>) tra i campi principali. Ogni evento registrato contiene:</p>
+<ul>
+<li><strong>Timestamp</strong>: Data e ora con precisione al <strong>millisecondo</strong> nel formato <code>[YYYY-MM-DD HH:MM:SS:mmm]</code></li>
+<li><strong>Livello Severità</strong>: Indicatore della criticità del messaggio</li>
+<li><code>D</code> = DEBUG (dettaglio tecnico per troubleshooting)</li>
+<li><code>I</code> = INFO (informazioni operative normali)</li>
+<li><code>W</code> = WARNING (situazioni anomale non bloccanti)</li>
+<li><code>E</code> = ERROR (errori di validazione o problemi operativi)</li>
+<li><strong>Messaggio</strong>: Descrizione testuale dell'evento con formattazione gerarchica ad albero</li>
+<li><strong>Prefissi gerarchici</strong>: <code>↳</code> per indicare relazioni padre-figlio tra operazioni</li>
+<li><strong>Emoji e simboli</strong>: Per facilitare la scansione visiva (✅ successo, ❌ errore, 📊 statistiche, 🔍 controllo, ecc.)</li>
+<li><strong>Indentazione progressiva</strong>: Per rappresentare il livello di annidamento delle operazioni</li>
+</ul>
+<p>Questa struttura consente sia la lettura manuale facilitata (grazie ai simboli e all'indentazione), sia il parsing automatico per sistemi di log aggregation aziendali (Splunk, ELK Stack, ecc.)</p>
+<h4 id="342-contenuto-del-log">3.4.2 Contenuto del Log</h4>
+<p>Il log documenta sistematicamente le seguenti <strong>macro-fasi</strong> del processo:</p>
+<p><strong>1. Inizializzazione Framework (Fase Bootstrap)</strong></p>
+<p>Traccia l'avvio del framework e la creazione dell'infrastruttura di logging:</p>
+<ul>
+<li>Invocazione funzione <code>InitializeDataQualityFramework</code> con parametri ricevuti (nome funzionale, path configurazione)</li>
+<li>Lettura file configurazione sistema (<code>DataQualityFramework.cfg</code>)</li>
+<li>Estrazione parametri di logging (<code>PATH_LOG</code>, <code>LOG_LEVEL</code>)</li>
+<li>Creazione file di log con naming convenzionale</li>
+<li>Conferma inizializzazione completata</li>
+</ul>
+<p><strong>2. Caricamento e Merge Configurazioni</strong></p>
+<p>Documenta il processo di costruzione della configurazione completa mediante merge gerarchico:</p>
+<ul>
+<li>Lettura configurazione PROCESSO (parametri globali del sistema)</li>
+<li>Risoluzione del mapping tra nome funzionale e path configurazione specifica</li>
+<li>Lettura configurazione FLUSSO (parametri specifici dell'elaborazione)</li>
+<li><strong>Merge con priorità FLUSSO → PROCESSO → DEFAULT</strong> documentando numero parametri per ciascun livello</li>
+<li>Costruzione dataclass tipizzato <code>FlowParameters</code> con 7 sub-dataclass</li>
+<li>Validazione parametri obbligatori e controlli di coerenza</li>
+<li>Verifica esistenza e permessi di scrittura delle directory di output</li>
+</ul>
+<p><strong>3. Banner Informativo Processo</strong></p>
+<p>Output formattato con separatori grafici che riassume:</p>
+<ul>
+<li>Versione framework</li>
+<li>Timestamp avvio processo</li>
+<li>Comando di esecuzione</li>
+<li>Nome flusso e tipo processo</li>
+<li>Descrizione e versione flusso</li>
+<li>Path file log, configurazione sistema e configurazione flusso</li>
+</ul>
+<p><strong>4. Tabella Parametri di Configurazione</strong></p>
+<p>Tabella strutturata che documenta la <strong>risoluzione effettiva</strong> di tutti i parametri utilizzati, mostrando per ciascuno:</p>
+<ul>
+<li>Valore configurato nel file PROCESSO</li>
+<li>Valore configurato nel file FLUSSO (se presente)</li>
+<li>Valore DEFAULT del framework</li>
+<li><strong>Valore effettivamente utilizzato</strong> (evidenziando quale livello ha vinto nella priorità)</li>
+</ul>
+<p>Questa tabella costituisce una <strong>fotografia runtime</strong> della configurazione applicata, fondamentale per troubleshooting e audit.</p>
+<p><strong>5. Pattern Matching e Selezione File</strong></p>
+<p>Se configurato, documenta il processo di ricerca e selezione dei file da elaborare:</p>
+<ul>
+<li>Directory scansionata</li>
+<li>Pattern di ricerca applicato</li>
+<li>Criteri di ordinamento (es: <code>nome[17:8:numero:desc]</code>)</li>
+<li>Strategia di selezione (<code>first</code>, <code>last</code>, <code>all</code>)</li>
+<li>Numero file trovati vs file da elaborare vs file da skippare</li>
+<li><strong>Tabella riepilogativa</strong> con elenco file e relativo stato (TO WORK / TO SKIP)</li>
+</ul>
+<p><strong>6. Validazione Tracciato</strong></p>
+<p>Traccia la verifica preliminare del file di configurazione del tracciato:</p>
+<ul>
+<li>Verifica esistenza file tracciato</li>
+<li>Lettura e parsing struttura CSV</li>
+<li>Controllo presenza colonne obbligatorie (dipendono dal formato: CSV vs FIXED)</li>
+<li>Validazione righe tracciato (numero attributi configurati)</li>
+<li>Verifica duplicati e sequenzialità indici</li>
+<li><strong>Tabella dettaglio tracciato</strong> con tutti gli attributi configurati e relativi controlli</li>
+</ul>
+<p><strong>7. Elaborazione Dati</strong></p>
+<p>Documenta la fase di validazione vera e propria:</p>
+<ul>
+<li>Avvio engine di validazione (dispatch tra <code>csv_data_quality_engine</code> e <code>fixed_data_quality_engine</code>)</li>
+<li><strong>Log errori di validazione</strong>: Per ogni record che viola un controllo, viene registrato un messaggio ERROR con:<ul>
+<li>Nome file</li>
+<li>Numero riga</li>
+<li>Nome attributo</li>
+<li>Valore errato</li>
+<li>Codice errore (es: <code>E00603</code>)</li>
+<li>Descrizione dettagliata della violazione</li>
+</ul>
+</li>
+</ul>
+<h4 id="343-livelli-di-logging">3.4.3 Livelli di Logging</h4>
+<p>Il framework supporta <strong>cinque livelli di dettaglio</strong> configurabili tramite il parametro <code>LOG_LEVEL</code> nel file di configurazione. La scelta del livello appropriato dipende dal contesto operativo:</p>
+<table>
+<thead>
+<tr>
+<th>Livello</th>
+<th>Codice</th>
+<th>Contenuto Tracciato</th>
+<th>Utilizzo Raccomandato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ERROR</strong></td>
+<td>E</td>
+<td>Solo errori critici e violazioni di validazione</td>
+<td>Produzione con volumi elevati</td>
+</tr>
+<tr>
+<td><strong>INFO</strong></td>
+<td>I</td>
+<td>Errori + informazioni operative principali</td>
+<td><strong>Produzione standard</strong> (default)</td>
+</tr>
+<tr>
+<td><strong>DEBUG</strong></td>
+<td>D</td>
+<td>INFO + dettaglio operazioni interne</td>
+<td>Troubleshooting problemi di configurazione</td>
+</tr>
+<tr>
+<td><strong>DEBUG1</strong></td>
+<td>D</td>
+<td>DEBUG + dettaglio parametri e dataclass</td>
+<td>Sviluppo e testing</td>
+</tr>
+<tr>
+<td><strong>DEBUG2</strong></td>
+<td>D</td>
+<td>DEBUG1 + dettaglio parsing record</td>
+<td>Analisi problemi di formato dati</td>
+</tr>
+<tr>
+<td><strong>DEBUG3</strong></td>
+<td>D</td>
+<td>DEBUG2 + massimo dettaglio (ogni singola operazione)</td>
+<td>Troubleshooting avanzato</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nota Performance</strong>: I livelli DEBUG, DEBUG1, DEBUG2 e DEBUG3 producono un volume di log significativamente maggiore e possono impattare le performance su file di grandi dimensioni. Utilizzarli solo in fase di troubleshooting su subset di dati o in ambienti non di produzione</p>
+<h4 id="344-esempio-log-completo-estratto-reale">3.4.4 Esempio Log Completo (Estratto Reale)</h4>
+<p>Di seguito un estratto significativo di un log reale con livello DEBUG3, che mostra le principali sezioni:</p>
+<p><strong>Caratteristiche chiave del log mostrato:</strong>
+- <strong>Timestamp millisecondi</strong> per analisi temporali precise
+- <strong>Gerarchia visuale</strong> con simboli freccia e indentazione progressiva
+- <strong>Emoji contestuali</strong> per rapida identificazione visiva del tipo di evento
+- <strong>Tracciamento completo</strong> del merge configurazioni con conteggi numerici
+- <strong>Pattern matching dettagliato</strong> con tabella riepilogativa file trovati/selezionati
+- <strong>Errori di validazione puntuali</strong> con file, riga, attributo, valore e codice errore</p>
+<p><strong>Esempio Log (livello DEBUG3):</strong></p>
+<pre class="codehilite"><code>2025-11-12 14:35:22.123 | INFO  | ═══════════════════════════════════════════════════════════════
+2025-11-12 14:35:22.124 | INFO  | DATA QUALITY FRAMEWORK v1.0 - AVVIO PROCESSO
+2025-11-12 14:35:22.125 | INFO  | ═══════════════════════════════════════════════════════════════
+2025-11-12 14:35:22.126 | INFO  | Caricamento configurazione processo...
+2025-11-12 14:35:22.145 | INFO  | ✅ Configurazione processo caricata (15 parametri)
+2025-11-12 14:35:22.146 | INFO  | Caricamento configurazione flusso...
+2025-11-12 14:35:22.167 | INFO  | ✅ Configurazione flusso caricata (22 parametri)
+2025-11-12 14:35:22.168 | INFO  | 
+2025-11-12 14:35:22.169 | INFO  | 📁 ELABORAZIONE FILE: dipendenti_20251103.csv
+2025-11-12 14:35:22.170 | INFO  | 🔍 Caricamento tracciato: dipendenti_layout.csv
+2025-11-12 14:35:22.234 | INFO  | ✅ Tracciato caricato: 10 attributi configurati
+2025-11-12 14:35:22.235 | INFO  | 
+2025-11-12 14:35:22.236 | INFO  | 🔄 Avvio validazione dati...
+2025-11-12 14:35:23.456 | INFO  | ✅ Validazione completata
+2025-11-12 14:35:23.457 | INFO  | 
+2025-11-12 14:35:23.458 | INFO  | 📊 RIEPILOGO ELABORAZIONE:
+2025-11-12 14:35:23.459 | INFO  |    Record totali    : 3
+2025-11-12 14:35:23.460 | INFO  |    Record validi    : 2 (66.67%)
+2025-11-12 14:35:23.461 | INFO  |    Record scartati  : 1 (33.33%)
+2025-11-12 14:35:23.462 | INFO  |    Tempo elaborazione: 1.234 secondi
+2025-11-12 14:35:23.463 | INFO  |    Throughput        : 2.43 record/sec
+2025-11-12 14:35:23.464 | INFO  | 
+2025-11-12 14:35:23.465 | INFO  | ═══════════════════════════════════════════════════════════════
+2025-11-12 14:35:23.466 | INFO  | PROCESSO COMPLETATO CON SUCCESSO
+2025-11-12 14:35:23.467 | INFO  | ═══════════════════════════════════════════════════════════════
+</code></pre>
+
+<h4 id="345-utilizzo-operativo">3.4.5 Utilizzo Operativo</h4>
+<p>Il file di log è strumento fondamentale per:</p>
+<ul>
+<li><strong>Audit Trail Completo</strong>: Documentazione cronologica e dettagliata di tutte le operazioni eseguite, necessaria per verifiche di compliance normativa (GDPR, SOX, ISO)</li>
+<li><strong>Troubleshooting Rapido</strong>: Diagnosi di problemi operativi mediante analisi dei messaggi ERROR e WARNING con contesto completo</li>
+<li><strong>Performance Analysis</strong>: Valutazione tempi di elaborazione mediante timestamp millisecondi per identificare colli di bottiglia</li>
+<li><strong>Configuration Review</strong>: Verifica della configurazione effettivamente applicata tramite la tabella parametri merged</li>
+<li><strong>Post-Mortem Analysis</strong>: Ricostruzione esatta della sequenza di eventi in caso di anomalie, contestazioni o incident</li>
+<li><strong>Debugging Avanzato</strong>: Utilizzo livelli DEBUG per analisi granulare del comportamento del framework durante sviluppo o troubleshooting complesso</li>
+<li><strong>Correlation Analysis</strong>: Collegamento immediato tra file di output prodotti e relative tracce di elaborazione grazie al naming convenzionale</li>
+<li><strong>Quality Monitoring</strong>: Identificazione trend di errori mediante analisi longitudinale dei log su elaborazioni successive dello stesso flusso</li>
+</ul>
+<p>Il naming convenzionale del file di log (<code>NOME_FLUSSO_YYYYMMDDHHmmSSmmm.log</code>) garantisce univocità e ordinamento cronologico automatico, facilitando la gestione dello storico e l'archiviazione per retention policy aziendali.</p>
+<hr />
+<p><strong>Fine del documento</strong></p>
+<p>📋 Versione: 1.0.0<br />
+📝 Ultimo aggiornamento: 12 Novembre 2025<br />
+👤 Autore: Alberto Robetti</p>
+        <hr>
+        <div class="footer">
+            <p>📄 Data Quality Framework - Versione 1.0.0</p>
+            <p>Documentazione Generata il 12/11/2025 23:27</p>
+            <p>👤 Autore: Alberto Robetti</p>
+        </div>
+    </main>
+</body>
+</html>
