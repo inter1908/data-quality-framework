@@ -33,14 +33,13 @@ bat/                            # Script test
 
 ## Documentation
 
-**Guida completa**: 
-- 📄 [Markdown su GitHub](docs/Data_Quality_Framework_Guida.md) - Visualizzazione nativa
-- 🌐 **[HTML con Diagrammi Mermaid](https://raw.githack.com/inter1908/data-quality-framework/master/docs_html/Data_Quality_Framework_Guida.html)** - Click per aprire in browser
-- 📖 [GitHub Pages](https://inter1908.github.io/data-quality-framework/docs_html/Data_Quality_Framework_Guida.html) *(se attivato)*
+## 📖 Documentation
 
-> ⚠️ **Nota**: Per vedere i diagrammi, usa il link HTML sopra. GitHub non renderizza file HTML direttamente.
+🌐 **[Guida Completa HTML](https://raw.githack.com/inter1908/data-quality-framework/master/docs_html/Data_Quality_Framework_Guida.html)** - Documentazione completa con diagrammi interattivi
 
-**Installation guide**: [INSTALL.md](INSTALL.md)
+📄 **[Installation Guide](INSTALL.md)** - Guida installazione rapida
+
+📋 **[Markdown su GitHub](docs/Data_Quality_Framework_Guida.md)** - Versione testuale (senza diagrammi)
 
 ## Examples
 
