@@ -35,7 +35,8 @@ bat/                            # Script test
 
 **Guida completa**: 
 - 📄 [Markdown](docs/Data_Quality_Framework_Guida.md)
-- 🌐 [HTML Preview](https://htmlpreview.github.io/?https://github.com/inter1908/data-quality-framework/blob/master/docs_html/Data_Quality_Framework_Guida.html)
+- 🌐 [HTML con Diagrammi](https://raw.githack.com/inter1908/data-quality-framework/master/docs_html/Data_Quality_Framework_Guida.html)
+- 📖 [GitHub Pages](https://inter1908.github.io/data-quality-framework/docs_html/Data_Quality_Framework_Guida.html) *(dopo attivazione)*
 
 **Installation guide**: [INSTALL.md](INSTALL.md)
 
